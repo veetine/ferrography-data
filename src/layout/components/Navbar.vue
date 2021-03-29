@@ -1,0 +1,161 @@
+<template>
+  <div class="navbar">
+    <el-menu
+      :default-active="activeIndex"
+      class="el-menu-demo"
+      mode="horizontal"
+      router menu-trigger="click"
+      @select="handleSelect"
+    >
+      <el-submenu index="1">
+        <template slot="title">文件</template>
+        <el-menu-item index="/index">导入</el-menu-item>
+        <el-menu-item index="/index">导出</el-menu-item>
+      </el-submenu>
+      <el-submenu index="2">
+        <template slot="title">数据注册 </template>
+        <el-menu-item index="/register/engine">发动机注册</el-menu-item>
+        <el-menu-item index="/register/oil">油液注册</el-menu-item>
+      </el-submenu>
+      <el-menu-item index="/identify/index">磨粒识别</el-menu-item>
+      <el-menu-item index="/diagnosis/index">自动诊断</el-menu-item>
+      <el-menu-item index="/stat/index">统计分析</el-menu-item>
+      <el-menu-item index="/analysis/index">趋势分析</el-menu-item>
+      <el-submenu index="7">
+        <template slot="title">系统设置</template>
+        <el-menu-item>数据库维护</el-menu-item>
+        <el-menu-item>飞机型号设置</el-menu-item>
+        <el-menu-item>发动机型号设置</el-menu-item>
+      </el-submenu>
+      <el-submenu index="8">
+        <template slot="title">帮助</template>
+        <el-menu-item >软件介绍</el-menu-item>
+        <el-menu-item >使用方法</el-menu-item>
+      </el-submenu>
+      <div class="right-menu" style="height: 60px; line-height: 60px">
+        <el-dropdown class="avatar-container" trigger="click">
+          <div class="avatar-wrapper">
+            <img src="@/assets/img/headimg.jpeg" class="user-avatar" />
+            <span style="margin-left: 10px">管理员</span>
+          </div>
+          <el-dropdown-menu slot="dropdown" class="user-dropdown">
+            <el-dropdown-item >
+              <span style="display: block">退出登录</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </el-menu>
+    <div class="line"></div>
+    <!-- <breadcrumb class="breadcrumb-container" /> -->
+  </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+// import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from "@/components/Hamburger";
+const { ipcRenderer } = window.require("electron");
+
+export default {
+  components: {
+    Hamburger,
+  },
+  computed: {
+    ...mapGetters(["sidebar", "avatar", "name"]),
+  },
+  data() {
+    return {
+      activeIndex: "1",
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    toggleSideBar() {
+      this.$store.dispatch("app/toggleSideBar");
+    },
+    async logout() {
+      await this.$store.dispatch("user/logout");
+      ipcRenderer.send("logout");
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.navbar {
+  .dd {
+    position: fixed;
+    width: 100%;
+    height: 10px;
+    top: 60px;
+    left: 0;
+    box-shadow: 0px 6px 4px -4px #c1c1c1;
+    z-index: 99999999999;
+  }
+
+  .hamburger-container {
+    line-height: 65px;
+    height: 100%;
+    float: left;
+    cursor: pointer;
+    transition: background 0.3s;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.025);
+    }
+  }
+
+  .breadcrumb-container {
+    float: left;
+  }
+
+  .right-menu {
+    float: right;
+    height: 100%;
+    &:focus {
+      outline: none;
+    }
+
+    .right-menu-item {
+      display: inline-block;
+      padding: 0 8px;
+      height: 100%;
+      font-size: 18px;
+      color: #5a5e66;
+      vertical-align: text-bottom;
+
+      &.hover-effect {
+        cursor: pointer;
+        transition: background 0.3s;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.025);
+        }
+      }
+    }
+
+    .avatar-container {
+      margin-right: 30px;
+
+      .avatar-wrapper {
+        height: 60px;
+        cursor: pointer;
+        .user-avatar {
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+          cursor: pointer;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+}
+</style>
