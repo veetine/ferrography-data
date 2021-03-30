@@ -4,7 +4,7 @@
       <el-col :span="24">
         <el-card style="margin: 10px" class="mycard">
           <div slot="header" class="clearfix">
-            <span>发动机列表</span>
+            <span>采样部位信息库</span>
             <el-button
               style="float: right; padding: 3px 0"
               type="text"
@@ -14,7 +14,7 @@
           </div>
 
           <el-table
-            :data="motors"
+            :data="samples"
             size="small"
             style="width: 100%"
             header-cell-class-name="head"
@@ -24,11 +24,7 @@
             <el-table-column type="selection" width="65" />
             <el-table-column prop="id" label="编号" width="120">
             </el-table-column>
-            <el-table-column prop="motor_type" label="发动机型号">
-            </el-table-column>
-            <el-table-column prop="motor_num" label="发动机编号">
-            </el-table-column>
-            <el-table-column prop="plane_type" label="飞机型号">
+            <el-table-column prop="position" label="采样部位">
             </el-table-column>
             <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
@@ -53,15 +49,9 @@
       width="35%"
     >
       <el-form ref="form" :model="form" label-width="100px" size="small">
-        <el-form-item label="发动机型号">
-          <el-input v-model="form.motor_type"></el-input>
+        <el-form-item label="采样部位">
+          <el-input v-model="form.position"></el-input>
         </el-form-item>
-        <el-form-item label="发动机编号">
-          <el-input v-model="form.motor_num"></el-input> </el-form-item
-        ><el-form-item label="飞机型号">
-          <el-input v-model="form.plane_type"></el-input>
-        </el-form-item>
-
         <el-form-item style="margin-top: 30px">
           <el-button type="primary" @click="onSubmit">提 交</el-button>
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -71,28 +61,27 @@
   </div>
 </template>
 
-  <script>
-import { addMotor, getMotor, delMotor, updMotor } from "@/api/motor";
+<script>
+import { addSample, getSample, delSample, updSample } from "@/api/sample";
 export default {
   mounted() {
-    this.loadMotor();
+    this.loadSample();
   },
   methods: {
     del(row) {
-      console.log(row);
       this.$confirm("此操作将永久删除该信息吗, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          delMotor({ id: row.id }).then((response) => {
+          delSample({ id: row.id }).then((response) => {
             if (response.code == 0) {
               this.$message({
                 type: "success",
                 message: "删除成功!",
               });
-              this.loadMotor();
+              this.loadSample();
             }
           });
         })
@@ -101,16 +90,16 @@ export default {
     close() {
       this.form = {};
     },
-    loadMotor() {
-      getMotor().then((response) => {
+    loadSample() {
+      getSample().then((response) => {
         if (response) {
-          this.motors = response.data;
+          this.samples = response.data;
         }
       });
     },
     onSubmit() {
-      if (this.status == "添加发动机信息") {
-        addMotor(this.form).then((response) => {
+      if (this.status == "添加采样信息") {
+        addSample(this.form).then((response) => {
           if (response.code == 0) {
             this.$message({
               type: "success",
@@ -118,11 +107,11 @@ export default {
             });
             this.dialogVisible = false;
             this.form = {};
-            this.loadMotor();
+            this.loadSample();
           }
         });
       } else {
-        updMotor(this.form).then((response) => {
+        updSample(this.form).then((response) => {
           if (response.code == 0) {
             this.$message({
               type: "success",
@@ -130,7 +119,7 @@ export default {
             });
             this.dialogVisible = false;
             this.form = {};
-            this.loadMotor();
+            this.loadSample();
           }
         });
       }
@@ -140,20 +129,19 @@ export default {
     },
     add() {
       this.dialogVisible = true;
-      this.status = "添加发动机信息";
+      this.status = "添加采样信息";
     },
     edit(row) {
       this.form = JSON.parse(JSON.stringify(row));
-      console.log(this.form);
       this.dialogVisible = true;
-      this.status = "编辑发动机信息";
+      this.status = "编辑采样信息";
     },
   },
   data() {
     return {
       status: "",
       dialogVisible: false,
-      motors: [],
+      samples: [],
       form: {},
     };
   },

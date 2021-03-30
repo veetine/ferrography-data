@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '发动机滑油滤监控系统',
+  title: '航空发动机磨粒图谱数据库',
 
   /**
    * @type {boolean} true | false

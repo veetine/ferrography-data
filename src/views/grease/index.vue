@@ -4,7 +4,7 @@
       <el-col :span="24">
         <el-card style="margin: 10px" class="mycard">
           <div slot="header" class="clearfix">
-            <span>发动机列表</span>
+            <span>滑油信息库</span>
             <el-button
               style="float: right; padding: 3px 0"
               type="text"
@@ -14,7 +14,7 @@
           </div>
 
           <el-table
-            :data="motors"
+            :data="greases"
             size="small"
             style="width: 100%"
             header-cell-class-name="head"
@@ -24,12 +24,8 @@
             <el-table-column type="selection" width="65" />
             <el-table-column prop="id" label="编号" width="120">
             </el-table-column>
-            <el-table-column prop="motor_type" label="发动机型号">
-            </el-table-column>
-            <el-table-column prop="motor_num" label="发动机编号">
-            </el-table-column>
-            <el-table-column prop="plane_type" label="飞机型号">
-            </el-table-column>
+            <el-table-column prop="brand" label="滑油品牌"> </el-table-column>
+            <el-table-column prop="brand_type" label="型号"> </el-table-column>
             <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="edit(scope.row)">
@@ -53,29 +49,27 @@
       width="35%"
     >
       <el-form ref="form" :model="form" label-width="100px" size="small">
-        <el-form-item label="发动机型号">
-          <el-input v-model="form.motor_type"></el-input>
+        <el-form-item label="滑油品牌">
+          <el-input v-model="form.brand"></el-input>
         </el-form-item>
-        <el-form-item label="发动机编号">
-          <el-input v-model="form.motor_num"></el-input> </el-form-item
-        ><el-form-item label="飞机型号">
-          <el-input v-model="form.plane_type"></el-input>
+        <el-form-item label="型号">
+          <el-input v-model="form.brand_type"></el-input>
         </el-form-item>
-
         <el-form-item style="margin-top: 30px">
           <el-button type="primary" @click="onSubmit">提 交</el-button>
           <el-button @click="dialogVisible = false">取 消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
+    
   </div>
 </template>
 
   <script>
-import { addMotor, getMotor, delMotor, updMotor } from "@/api/motor";
+import { addGrease, getGrease, delGrease, updGrease } from "@/api/grease";
 export default {
   mounted() {
-    this.loadMotor();
+    this.loadGrease();
   },
   methods: {
     del(row) {
@@ -86,13 +80,13 @@ export default {
         type: "warning",
       })
         .then(() => {
-          delMotor({ id: row.id }).then((response) => {
+          delGrease({ id: row.id }).then((response) => {
             if (response.code == 0) {
               this.$message({
                 type: "success",
                 message: "删除成功!",
               });
-              this.loadMotor();
+              this.loadGrease();
             }
           });
         })
@@ -101,16 +95,16 @@ export default {
     close() {
       this.form = {};
     },
-    loadMotor() {
-      getMotor().then((response) => {
+    loadGrease() {
+      getGrease().then((response) => {
         if (response) {
-          this.motors = response.data;
+          this.greases = response.data;
         }
       });
     },
     onSubmit() {
-      if (this.status == "添加发动机信息") {
-        addMotor(this.form).then((response) => {
+      if (this.status == "添加滑油信息") {
+        addGrease(this.form).then((response) => {
           if (response.code == 0) {
             this.$message({
               type: "success",
@@ -118,11 +112,11 @@ export default {
             });
             this.dialogVisible = false;
             this.form = {};
-            this.loadMotor();
+            this.loadGrease();
           }
         });
       } else {
-        updMotor(this.form).then((response) => {
+        updGrease(this.form).then((response) => {
           if (response.code == 0) {
             this.$message({
               type: "success",
@@ -130,7 +124,7 @@ export default {
             });
             this.dialogVisible = false;
             this.form = {};
-            this.loadMotor();
+            this.loadGrease();
           }
         });
       }
@@ -140,20 +134,19 @@ export default {
     },
     add() {
       this.dialogVisible = true;
-      this.status = "添加发动机信息";
+      this.status = "添加滑油信息";
     },
     edit(row) {
       this.form = JSON.parse(JSON.stringify(row));
-      console.log(this.form);
       this.dialogVisible = true;
-      this.status = "编辑发动机信息";
+      this.status = "编辑滑油信息";
     },
   },
   data() {
     return {
       status: "",
       dialogVisible: false,
-      motors: [],
+      greases: [],
       form: {},
     };
   },

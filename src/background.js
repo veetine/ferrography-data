@@ -1,28 +1,47 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
-import { updateRegister } from './electron/update'
-import { preHandleInit } from './electron/prehandle'
-import { initIpcMain, initMenu } from './electron/ipcMain'
+import {
+  app,
+  protocol,
+  BrowserWindow
+} from 'electron'
+import {
+  createProtocol
+} from 'vue-cli-plugin-electron-builder/lib'
+import installExtension, {
+  VUEJS_DEVTOOLS
+} from 'electron-devtools-installer'
+import {
+  updateRegister
+} from './electron/update'
+import {
+  preHandleInit
+} from './electron/prehandle'
+import {
+  initIpcMain,
+  initMenu
+} from './electron/ipcMain'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([
-  { scheme: 'app', privileges: { secure: true, standard: true }}
-])
+protocol.registerSchemesAsPrivileged([{
+  scheme: 'app',
+  privileges: {
+    secure: true,
+    standard: true
+  }
+}])
 
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 1200,
-    height: 700,
-    minHeight: 700,
+    width: 1380,
+    height: 800,
+    minHeight: 800,
     resizable: false,
-    minWidth: 1200,
+    minWidth: 1400,
     autoHideMenuBar: true,
-    maximizable: false,
+    maximizable: true,
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -73,7 +92,7 @@ app.on('activate', () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', async() => {
+app.on('ready', async () => {
   // if (isDevelopment && !process.env.IS_TEST) {
   //   // Install Vue Devtools
   //   try {

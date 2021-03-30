@@ -62,7 +62,20 @@ export const constantRoutes = [{
       }
     }]
   },
-
+{
+    path: '/index',
+    component: Layout,
+    hidden: true,
+    redirect: '/index',
+    children: [{
+      path: '',
+      component: () => import('@/views/index'),
+      meta: {
+        title: '首页',
+        icon: 'index'
+      }
+    }]
+  },
   {
     path: '/register',
     component: Layout,
@@ -80,70 +93,62 @@ export const constantRoutes = [{
         title: '发动机注册',
         icon: 'table'
       }
-    }, {
-      path: 'oil',
-      name: 'Oil',
-      component: () => import('@/views/register/oil'),
+    }]
+  },
+  {
+    path: '/grease',
+    component: Layout,
+    hidden: true,
+    redirect: '/grease/index',
+    children: [{
+      path: 'index',
+      name: '滑油信息库',
+      component: () => import('@/views/grease/index'),
       meta: {
-        title: '油液机注册',
-        icon: 'table'
+        title: '滑油信息库',
+        icon: 'grease'
       }
     }]
   },
   {
-    path: '/identify',
+    path: '/sample',
     component: Layout,
     hidden: true,
-    redirect: '/identify/index',
+    redirect: '/sample/index',
     children: [{
       path: 'index',
-      name: '磨粒识别',
-      component: () => import('@/views/identify/index'),
+      name: '采样部位信息库',
+      component: () => import('@/views/sample/index'),
       meta: {
-        title: '磨粒识别',
-        icon: 'identify'
-      }
-    }]
-  },
-  {
-    path: '/diagnosis',
-    component: Layout,
-    hidden: true,
-    redirect: '/diagnosis/index',
-    children: [{
-      path: 'index',
-      name: '磨粒识别',
-      component: () => import('@/views/diagnosis/index'),
-      meta: {
-        title: '自动诊断',
-        icon: 'diagnosis'
+        title: '采样部位信息库',
+        icon: 'sample'
       }
     }]
   }, {
-    path: '/stat',
+    path: '/analyse',
     component: Layout,
     hidden: true,
-    redirect: '/stat/index',
+    redirect: '/analyse/index',
     children: [{
       path: 'index',
-      name: '趋势分析',
-      component: () => import('@/views/stat/index'),
+      name: '铁谱磨粒分析库',
+      component: () => import('@/views/analyse/index'),
       meta: {
-        title: '趋势分析',
-        icon: 'stat'
+        title: '铁谱磨粒分析库',
+        icon: 'analyse'
       }
     }]
   }, {
-    path: '/index',
+    path: '/images/index',
     component: Layout,
     hidden: true,
     redirect: '/index',
     children: [{
       path: '',
-      name: '磨粒识别',
-      component: () => import('@/views/index'),
+      name: '铁谱磨粒照片库',
+      component: () => import('@/views/images/index'),
       meta: {
-        title: '首页',
+        title: '铁谱磨粒照片库',
         icon: 'index'
       }
     }]

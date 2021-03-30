@@ -1,8 +1,9 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
-export function getList(params) {
+export function delImages(params) {
   return request({
-    url: '/vue-admin-template/table/list',
+    url: '/images/del',
     method: 'get',
     params
   })

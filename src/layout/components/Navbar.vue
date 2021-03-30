@@ -4,33 +4,24 @@
       :default-active="activeIndex"
       class="el-menu-demo"
       mode="horizontal"
-      router menu-trigger="click"
+      router
+      menu-trigger="click"
       @select="handleSelect"
     >
-      <el-submenu index="1">
-        <template slot="title">文件</template>
-        <el-menu-item index="/index">导入</el-menu-item>
-        <el-menu-item index="/index">导出</el-menu-item>
-      </el-submenu>
-      <el-submenu index="2">
-        <template slot="title">数据注册 </template>
-        <el-menu-item index="/register/engine">发动机注册</el-menu-item>
-        <el-menu-item index="/register/oil">油液注册</el-menu-item>
-      </el-submenu>
-      <el-menu-item index="/identify/index">磨粒识别</el-menu-item>
-      <el-menu-item index="/diagnosis/index">自动诊断</el-menu-item>
-      <el-menu-item index="/stat/index">统计分析</el-menu-item>
-      <el-menu-item index="/analysis/index">趋势分析</el-menu-item>
+      <el-menu-item index="/register/engine">发动机信息库</el-menu-item>
+      <el-menu-item index="/grease/index">滑油信息库</el-menu-item>
+      <el-menu-item index="/sample/index">采样部位信息库</el-menu-item>
+      <el-menu-item index="/analyse/index">铁谱磨粒分析库</el-menu-item>
+      <el-menu-item index="/images/index">铁谱磨粒照片库</el-menu-item>
       <el-submenu index="7">
         <template slot="title">系统设置</template>
-        <el-menu-item>数据库维护</el-menu-item>
-        <el-menu-item>飞机型号设置</el-menu-item>
-        <el-menu-item>发动机型号设置</el-menu-item>
+        <el-menu-item>账号管理</el-menu-item>
+        <el-menu-item>数据库备份</el-menu-item>
       </el-submenu>
       <el-submenu index="8">
         <template slot="title">帮助</template>
-        <el-menu-item >软件介绍</el-menu-item>
-        <el-menu-item >使用方法</el-menu-item>
+        <el-menu-item>软件介绍</el-menu-item>
+        <el-menu-item>使用方法</el-menu-item>
       </el-submenu>
       <div class="right-menu" style="height: 60px; line-height: 60px">
         <el-dropdown class="avatar-container" trigger="click">
@@ -39,7 +30,7 @@
             <span style="margin-left: 10px">管理员</span>
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">
-            <el-dropdown-item >
+            <el-dropdown-item>
               <span style="display: block">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>
