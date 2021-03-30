@@ -1,6 +1,6 @@
 <template>
   <div class="container" style="margin: 0 auto; text-align: center">
-    <p style="margin: 40px">首页</p>
+    <p style="margin: 40px"></p>
     <el-image fit="scale-down" :src="img" />
   </div>
 </template>

@@ -53,21 +53,6 @@ export const constantRoutes = [{
     hidden: true,
     redirect: '/update',
     children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: {
-        title: 'Dashboard',
-        icon: 'dashboard'
-      }
-    }]
-  },
-{
-    path: '/index',
-    component: Layout,
-    hidden: true,
-    redirect: '/index',
-    children: [{
       path: '',
       component: () => import('@/views/index'),
       meta: {
@@ -150,20 +135,6 @@ export const constantRoutes = [{
       meta: {
         title: '铁谱磨粒照片库',
         icon: 'index'
-      }
-    }]
-  }, {
-    path: '/analysis',
-    component: Layout,
-    hidden: true,
-    redirect: '/analysis/index',
-    children: [{
-      path: 'index',
-      name: '趋势分析',
-      component: () => import('@/views/analysis/index'),
-      meta: {
-        title: '趋势分析',
-        icon: 'Analysis'
       }
     }]
   },
