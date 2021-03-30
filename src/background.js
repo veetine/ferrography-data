@@ -66,12 +66,10 @@ async function createWindow() {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
-    win.webContents.openDevTools()
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
-  win.webContents.openDevTools()
 }
 
 // Quit when all windows are closed.
