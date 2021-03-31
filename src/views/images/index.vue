@@ -446,7 +446,7 @@ export default {
         .catch(() => {});
     },
     save() {
-      if (this.status == "add") {
+      if (this.status == "add" && !this.form.id) {
         addReport(this.form).then((response) => {
           if (response) {
             this.$set(this.form, "id", response.data);
