@@ -203,156 +203,165 @@
       width="90%"
     >
       <el-row>
-        <el-col :span="16">
-          <div class="block" style="text-align: center; margin-bottom: 15px">
-            <el-image
-              style="width: 400px; height: 350px; margin-bottom: 20px"
-              fit="scale-down"
-              :src="imageUrl"
-            >
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline"></i>
-              </div>
-            </el-image>
-            <div data-v-3780a3d6="">
-              <ul class="el-upload-list el-upload-list--picture-card">
-                <li
-                  v-for="item in fileList"
-                  :key="item.name"
-                  :label="item.url"
-                  :value="item.url"
-                  tabindex="0"
-                  class="el-upload-list__item is-success"
-                  style="float: left"
-                >
-                  <el-image
-                    fit="contain"
-                    @click="selectImg(item.url)"
-                    :src="item.url"
-                  />
-                  <a class="el-upload-list__item-name"
-                    ><i class="el-icon-document"></i>15 </a
-                  ><label class="el-upload-list__item-status-label"
-                    ><i class="el-icon-upload-success el-icon-check"></i></label
-                  ><i class="el-icon-close"></i>
-                </li>
-              </ul>
+        <el-col :span="14">
+          <el-card style="margin-right: 10px; margin-bottom: 10px">
+            <div slot="header" class="clearfix">
+              <span>图像信息</span>
             </div>
-          </div>
+            <el-form
+              :inline="true"
+              ref="form"
+              :model="form"
+              size="small"
+              label-width="110px"
+              class="zndfx"
+            >
+              <el-form-item label="飞机型号">
+                <el-select
+                  v-model="form.plane_type"
+                  size="small"
+                  disabled
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in motors"
+                    :key="item.id"
+                    :label="item.plane_type"
+                    :value="item.plane_type"
+                  />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="发动机型号">
+                <el-select
+                  v-model="form.motor_type"
+                  size="small"
+                  disabled
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in motors"
+                    :key="item.id"
+                    :label="item.motor_type"
+                    :value="item.motor_type"
+                  />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="发动机编号">
+                <el-select
+                  disabled
+                  v-model="form.motor_num"
+                  size="small"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in motors"
+                    :key="item.id"
+                    :label="item.motor_num"
+                    :value="item.motor_num"
+                  />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="采样部位">
+                <el-select
+                  disabled
+                  v-model="form.sample_position"
+                  size="small"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in samples"
+                    :key="item.id"
+                    :label="item.position"
+                    :value="item.position"
+                  />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="采样日期">
+                <el-date-picker
+                  style="width: 191px"
+                  disabled
+                  size="small"
+                  v-model="form.sample_time"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="采样日期"
+                >
+                </el-date-picker>
+              </el-form-item>
+
+              <el-form-item label="发动机工作时间">
+                <el-input
+                  disabled
+                  style="width: 191px"
+                  v-model="form.motor_work_time"
+                  placeholder="发动机工作时间"
+                  size="small"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item label="滑油工作时间">
+                <el-input
+                  style="width: 191px"
+                  disabled
+                  placeholder="滑油工作时间"
+                  v-model="form.grease_work_time"
+                  size="small"
+                >
+                </el-input>
+              </el-form-item>
+            </el-form>
+          </el-card>
+          <el-card class="box-card" style="margin-right: 10px">
+            <div slot="header" class="clearfix">
+              <span>图像</span>
+            </div>
+            <div class="block" style="text-align: center; margin-bottom: 15px">
+              <el-image
+                style="width: 400px; height: 370px; margin-bottom: 10px"
+                fit="scale-down"
+                :src="imageUrl"
+              >
+                <div slot="error" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+              <div data-v-3780a3d6="">
+                <ul class="el-upload-list el-upload-list--picture-card">
+                  <li
+                    v-for="item in fileList"
+                    :key="item.name"
+                    :label="item.url"
+                    :value="item.url"
+                    tabindex="0"
+                    class="el-upload-list__item is-success"
+                    style="float: left"
+                  >
+                    <el-image
+                      fit="contain"
+                      @click="selectImg(item.url)"
+                      :src="item.url"
+                    />
+                    <a class="el-upload-list__item-name"
+                      ><i class="el-icon-document"></i>15 </a
+                    ><label class="el-upload-list__item-status-label"
+                      ><i
+                        class="el-icon-upload-success el-icon-check"
+                      ></i></label
+                    ><i class="el-icon-close"></i>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </el-card>
         </el-col>
 
-        <el-col :span="8">
+        <el-col :span="10">
           <el-card class="box-card">
             <el-tabs v-model="activeName" @tab-click="tabHandleClick">
-              <el-tab-pane label="图像信息" name="imginfo">
-                <el-form
-                  style="margin-top: 10px"
-                  ref="form"
-                  :model="form"
-                  size="small"
-                  label-width="130px"
-                  class="zndfx"
-                >
-                  <el-form-item label="飞机型号">
-                    <el-select
-                      v-model="form.plane_type"
-                      size="small"
-                      disabled
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in motors"
-                        :key="item.id"
-                        :label="item.plane_type"
-                        :value="item.plane_type"
-                      />
-                    </el-select>
-                  </el-form-item>
-
-                  <el-form-item label="发动机型号">
-                    <el-select
-                      v-model="form.motor_type"
-                      size="small"
-                      disabled
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in motors"
-                        :key="item.id"
-                        :label="item.motor_type"
-                        :value="item.motor_type"
-                      />
-                    </el-select>
-                  </el-form-item>
-
-                  <el-form-item label="发动机编号">
-                    <el-select
-                      disabled
-                      v-model="form.motor_num"
-                      size="small"
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in motors"
-                        :key="item.id"
-                        :label="item.motor_num"
-                        :value="item.motor_num"
-                      />
-                    </el-select>
-                  </el-form-item>
-
-                  <el-form-item label="采样部位">
-                    <el-select
-                      disabled
-                      v-model="form.sample_position"
-                      size="small"
-                      placeholder="请选择"
-                    >
-                      <el-option
-                        v-for="item in samples"
-                        :key="item.id"
-                        :label="item.position"
-                        :value="item.position"
-                      />
-                    </el-select>
-                  </el-form-item>
-
-                  <el-form-item label="采样日期">
-                    <el-date-picker
-                      style="width: 191px"
-                      disabled
-                      v-model="form.sample_time"
-                      type="date"
-                      value-format="yyyy-MM-dd"
-                      placeholder="采样日期"
-                    >
-                    </el-date-picker>
-                  </el-form-item>
-
-                  <el-form-item label="发动机工作时间">
-                    <el-input
-                      disabled
-                      v-model="form.motor_work_time"
-                      placeholder="123"
-                      size="small"
-                    >
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item label="滑油工作时间">
-                    <el-input
-                      disabled
-                      placeholder="滑油工作时间"
-                      v-model="form.grease_work_time"
-                      size="small"
-                    >
-                    </el-input>
-                  </el-form-item>
-
-                  <el-form-item style="margin-top: 15px">
-                    <el-button size="small" @click="close">关闭</el-button>
-                  </el-form-item>
-                </el-form>
-              </el-tab-pane>
               <el-tab-pane label="特征磨粒" name="tezhengmoli">
                 <el-table
                   size="small"
@@ -561,7 +570,7 @@ export default {
       imageUrl: "",
       dialogVisible: false,
       textarea: "",
-      activeName: "imginfo",
+      activeName: "tezhengmoli",
     };
   },
   methods: {
@@ -569,12 +578,14 @@ export default {
     detail(row) {
       getReportImages({ image_num: row.image_num }).then((response) => {
         if (response) {
-          this.fileList = response.data.images.map((value, key) => {
-            return {
-              name: value.id,
-              url: value.image_path,
-            };
-          });
+          if (response.data.images != null) {
+            this.fileList = response.data.images.map((value, key) => {
+              return {
+                name: value.id,
+                url: value.image_path,
+              };
+            });
+          }
           if (this.fileList.length != 0) {
             this.imageUrl = this.fileList[0].url;
           }
@@ -634,6 +645,13 @@ export default {
       position: unset;
     }
 
+    .el-form-item {
+      margin-bottom: 8px;
+    }
+    .el-card__header {
+      padding: 14px 20px;
+    }
+
     .item4 .el-form-item__label {
       margin-left: 3px;
       margin-right: 3px;
@@ -683,6 +701,7 @@ export default {
     .el-card__body {
       width: 100%;
       padding: 10px;
+      padding-top: 4px;
       border-radius: 4px;
       overflow: hidden;
     }

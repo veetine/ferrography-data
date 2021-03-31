@@ -190,7 +190,7 @@
           <el-table-column fixed="right" label="操作" width="120">
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="edit(scope.row)">
-                查看
+                编辑
               </el-button>
               <el-button type="text" size="small" @click="del(scope.row)">
                 移除
@@ -206,44 +206,36 @@
       center
       :visible.sync="dialogVisible"
       @close="close"
-      width="90%"
+      width="91%"
     >
       <el-row>
         <el-col :span="16">
-          <div
-            class="block"
-            style="text-align: center; margin-bottom: 15px"
-          ></div>
-          <div class="demo-image__error">
-            <div class="block" style="text-align: center">
-              <el-image
-                style="width: 350px; height: 350px; margin-bottom: 20px"
-                :src="imageUrl"
-                class="avatar"
-                fit="scale-down"
-              >
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </div>
-          </div>
-
-          <el-upload
-            ref="upload"
-            action="http://localhost:4394/api/images/upload"
-            list-type="picture-card"
-            :on-remove="handleRemove"
-            :data="form"
-            :on-preview="handlePictureCardPreview"
-            :on-change="handleAvatarSuccess"
-            :auto-upload="false"
-            multiple
-            :file-list="fileList"
-            :limit="20"
+          <el-card
+            style="margin-right: 10px; margin-bottom: 10px; min-height: 475px"
+            class="imglist"
           >
-            <i class="el-icon-plus"></i>
-          </el-upload>
+            <div slot="header" class="clearfix">
+              <span>图像列表</span>
+            </div>
+            <el-upload
+              ref="upload"
+              action="http://localhost:4394/api/images/upload"
+              list-type="picture-card"
+              :on-remove="handleRemove"
+              :data="form"
+              :on-preview="handlePictureCardPreview"
+              :on-change="handleAvatarSuccess"
+              :auto-upload="false"
+              multiple
+              :file-list="fileList"
+              :limit="20"
+            >
+              <i class="el-icon-plus"></i>
+            </el-upload>
+            <el-dialog :visible.sync="dialogImg" append-to-body>
+              <img width="100%" :src="imageUrl" alt="" />
+            </el-dialog>
+          </el-card>
         </el-col>
 
         <el-col :span="8">
@@ -384,6 +376,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
+      dialogImg: false,
       formInline: {},
       picker: "",
       form: { picker: "" },
@@ -400,12 +393,14 @@ export default {
       this.status = "edit";
       getReportImages({ image_num: row.image_num }).then((response) => {
         if (response) {
-          this.fileList = response.data.images.map((value, key) => {
-            return {
-              name: value.id,
-              url: value.image_path,
-            };
-          });
+          if (response.data.images != null) {
+            this.fileList = response.data.images.map((value, key) => {
+              return {
+                name: value.id,
+                url: value.image_path,
+              };
+            });
+          }
           this.form = response.data;
           this.dialogVisible = true;
         }
@@ -429,6 +424,7 @@ export default {
     },
     handlePictureCardPreview(file) {
       this.imageUrl = file.url;
+      this.dialogImg = true;
     },
     del(row) {
       this.$confirm("此操作将永久删除该信息吗, 是否继续?", "提示", {
@@ -526,6 +522,11 @@ export default {
 <style lang="scss" scoped>
 .diag-container {
   ::v-deep {
+    .imglist {
+      .el-card__body {
+        margin: 10px;
+      }
+    }
     .el-table td {
       position: unset;
     }

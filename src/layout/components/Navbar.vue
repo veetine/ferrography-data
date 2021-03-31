@@ -37,7 +37,23 @@
         </el-dropdown>
       </div>
     </el-menu>
-    <div class="line"></div>
+    <div class="ul-line">
+      <ul>
+        <li><img src="@/assets/img/file.png" /></li>
+        <li><img src="@/assets/img/engine.png" /></li>
+        <li><img src="@/assets/img/data_regist.png" /></li>
+        <li><img src="@/assets/img/oil.png" /></li>
+        <li><img src="@/assets/img/abrasive.png" /></li>
+        <li><img src="@/assets/img/diagnosis.png" /></li>
+        <li><img src="@/assets/img/analysis.png" /></li>
+        <li><img src="@/assets/img/model.png" /></li>
+        <li><img src="@/assets/img/sale.png" /></li>
+        <li><img src="@/assets/img/maintenance.png" /></li>
+        <li><img src="@/assets/img/user_setting.png" /></li>
+        <li><img src="@/assets/img/system_setting.png" /></li>
+        <li><img src="@/assets/img/help.png" /></li>
+      </ul>
+    </div>
     <!-- <breadcrumb class="breadcrumb-container" /> -->
   </div>
 </template>
@@ -78,6 +94,22 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
+  .ul-line {
+    padding-top: 5px;
+    ul {
+      display: inline;
+      padding: 5px 0 0 10px;
+      white-space: nowrap;
+      li {
+        display: inline-block;
+        margin-right: 5px;
+        img {
+          width: 55px;
+          height: 55px;
+        }
+      }
+    }
+  }
   .dd {
     position: fixed;
     width: 100%;
@@ -146,6 +178,20 @@ export default {
           border-radius: 10px;
         }
       }
+    }
+  }
+  ::v-deep {
+    .el-menu {
+      background: #ecf5ff;
+    }
+    .el-submenu__title:hover {
+      background: none;
+    }
+    .el-menu-item:hover {
+      background: none;
+    }
+    .el-menu-item:focus {
+      background: none;
     }
   }
 }
