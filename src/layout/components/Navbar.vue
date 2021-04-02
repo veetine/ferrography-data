@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <el-menu
-      :default-active="activeIndex"
+      :default-active="$route.path"
       class="el-menu-demo"
       mode="horizontal"
       router
@@ -39,16 +39,10 @@
     </el-menu>
     <div class="ul-line">
       <ul>
-        <li><img src="@/assets/img/file.png" /></li>
-        <li><img src="@/assets/img/engine.png" /></li>
-        <li><img src="@/assets/img/data_regist.png" /></li>
-        <li><img src="@/assets/img/oil.png" /></li>
-        <li><img src="@/assets/img/abrasive.png" /></li>
-        <li><img src="@/assets/img/diagnosis.png" /></li>
-        <li><img src="@/assets/img/analysis.png" /></li>
-        <li><img src="@/assets/img/model.png" /></li>
-        <li><img src="@/assets/img/sale.png" /></li>
-        <li><img src="@/assets/img/maintenance.png" /></li>
+        <li @click="engine"><img src="@/assets/img/engine.png" /></li>
+        <li @click="oil"><img src="@/assets/img/oil.png" /></li>
+        <li @click="data_regist"><img src="@/assets/img/data_regist.png" /></li>
+        <li @click="abrasive"><img src="@/assets/img/abrasive.png" /></li>
         <li><img src="@/assets/img/user_setting.png" /></li>
         <li><img src="@/assets/img/system_setting.png" /></li>
         <li><img src="@/assets/img/help.png" /></li>
@@ -77,6 +71,18 @@ export default {
     };
   },
   methods: {
+    engine() {
+      this.$router.push({ path: "/register/engine" });
+    },
+    abrasive() {
+      this.$router.push({ path: "/analyse/index" });
+    },
+    oil() {
+      this.$router.push({ path: "/grease/index" });
+    },
+    data_regist() {
+      this.$router.push({ path: "/sample/index" });
+    },
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },

@@ -30,7 +30,7 @@
 
           <el-form-item class="item5">
             <el-select
-              v-model="formInline.motor_type"
+              v-model="formInline.motor_num"
               clearable
               placeholder="发动机型号"
               @change="loadReport"
@@ -41,8 +41,8 @@
               <el-option
                 v-for="item in motors"
                 :key="item.id"
-                :label="item.motor_type"
-                :value="item.motor_type"
+                :label="item.motor_num"
+                :value="item.motor_num"
               />
             </el-select>
           </el-form-item>
@@ -120,20 +120,15 @@
           style="width: 100%"
           header-cell-class-name="head"
         >
-          <el-table-column label="图像编号">
-            <template slot-scope="scope">
-              {{ scope.row.image_num }}
-            </template>
-          </el-table-column>
           <el-table-column label="飞机型号">
             <template slot-scope="scope">
               {{ scope.row.plane_type }}
             </template>
           </el-table-column>
 
-          <el-table-column label="发动机型号">
+          <el-table-column label="飞机编号">
             <template slot-scope="scope">
-              {{ scope.row.motor_type }}
+              {{ scope.row.plane_num }}
             </template>
           </el-table-column>
 
@@ -189,6 +184,9 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
             <template slot-scope="scope">
+              <el-button type="text" size="small" @click="detail(scope.row)">
+                查看
+              </el-button>
               <el-button type="text" size="small" @click="edit(scope.row)">
                 编辑
               </el-button>
@@ -201,157 +199,28 @@
       </el-col>
     </el-row>
 
-    <el-dialog
-      title="新增照片库"
-      center
-      :visible.sync="dialogVisible"
-      @close="close"
-      width="91%"
-    >
-      <el-row>
-        <el-col :span="16">
-          <el-card
-            style="margin-right: 10px; margin-bottom: 10px; min-height: 475px"
-            class="imglist"
-          >
-            <div slot="header" class="clearfix">
-              <span>图像列表</span>
-            </div>
-            <el-upload
-              ref="upload"
-              action="http://localhost:4394/api/images/upload"
-              list-type="picture-card"
-              :on-remove="handleRemove"
-              :data="form"
-              :on-preview="handlePictureCardPreview"
-              :on-change="handleAvatarSuccess"
-              :auto-upload="false"
-              multiple
-              :file-list="fileList"
-              :limit="20"
-            >
-              <i class="el-icon-plus"></i>
-            </el-upload>
-            <el-dialog :visible.sync="dialogImg" append-to-body>
-              <img width="100%" :src="imageUrl" alt="" />
-            </el-dialog>
-          </el-card>
-        </el-col>
+    <AddImages
+      @backdata="backdata"
+      v-if="addImagesShow"
+      :row="currow"
+      class="add_images"
+    />
 
-        <el-col :span="8">
-          <el-card style="padding-right: 15px">
-            <div slot="header" class="clearfix">
-              <span>信息录入</span>
-            </div>
-            <el-form
-              style="margin-top: 10px"
-              ref="form"
-              :model="form"
-              size="small"
-              label-width="130px"
-              class="zndfx"
-            >
-              <el-form-item label="飞机型号">
-                <el-select
-                  v-model="form.plane_type"
-                  size="small"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in motors"
-                    :key="item.id"
-                    :label="item.plane_type"
-                    :value="item.plane_type"
-                  />
-                </el-select>
-              </el-form-item>
+    <Detail
+      @backdata="detailBackData"
+      @toanalyse="toAnalyse"
+      v-if="detailShow"
+      :row="currow"
+      class="detail_images"
+    />
 
-              <el-form-item label="发动机型号">
-                <el-select
-                  v-model="form.motor_type"
-                  size="small"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in motors"
-                    :key="item.id"
-                    :label="item.motor_type"
-                    :value="item.motor_type"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="发动机编号">
-                <el-select
-                  v-model="form.motor_num"
-                  size="small"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in motors"
-                    :key="item.id"
-                    :label="item.motor_num"
-                    :value="item.motor_num"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="采样部位">
-                <el-select
-                  v-model="form.sample_position"
-                  size="small"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in samples"
-                    :key="item.id"
-                    :label="item.position"
-                    :value="item.position"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="采样日期">
-                <el-date-picker
-                  style="width: 191px"
-                  v-model="form.sample_time"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  placeholder="采样日期"
-                >
-                </el-date-picker>
-              </el-form-item>
-
-              <el-form-item label="发动机工作时间">
-                <el-input
-                  v-model="form.motor_work_time"
-                  placeholder="123"
-                  size="small"
-                >
-                </el-input>
-              </el-form-item>
-              <el-form-item label="滑油工作时间">
-                <el-input
-                  placeholder="滑油工作时间"
-                  v-model="form.grease_work_time"
-                  size="small"
-                >
-                </el-input>
-              </el-form-item>
-
-              <el-form-item style="margin-top: 15px">
-                <el-button type="primary" size="small" @click="save"
-                  >保存</el-button
-                >
-                <el-button type="danger" size="small" @click="close"
-                  >关闭</el-button
-                >
-              </el-form-item>
-            </el-form>
-          </el-card>
-        </el-col>
-      </el-row>
-    </el-dialog>
+    <Analyse
+      @backdata="analyseBackData"
+      @toanalyse="toAnalyse"
+      v-if="analyseShow"
+      :row="currow"
+      class="add_images"
+    />
   </div>
 </template>
 
@@ -366,8 +235,16 @@ import {
   addReport,
 } from "@/api/report";
 import { delImages } from "@/api/images";
+import AddImages from "./add";
+import Detail from "./detail";
+import Analyse from "./analyse";
 
 export default {
+  components: {
+    AddImages,
+    Detail,
+    Analyse,
+  },
   mounted() {
     this.loadMotor();
     this.loadSample();
@@ -375,7 +252,10 @@ export default {
   },
   data() {
     return {
-      dialogVisible: false,
+      currow: {},
+      addImagesShow: false,
+      analyseShow: false,
+      detailShow: false,
       dialogImg: false,
       formInline: {},
       picker: "",
@@ -384,31 +264,36 @@ export default {
       motors: [],
       samples: [],
       fileList: [],
-      imageUrl: "",
       status: "",
     };
   },
   methods: {
-    edit(row) {
-      this.status = "edit";
-      getReportImages({ image_num: row.image_num }).then((response) => {
-        if (response) {
-          if (response.data.images != null) {
-            this.fileList = response.data.images.map((value, key) => {
-              return {
-                name: value.id,
-                url: value.image_path,
-              };
-            });
-          }
-          this.form = response.data;
-          this.dialogVisible = true;
-        }
-      });
+    detail(row) {
+      this.detailShow = true;
+      this.currow = row;
     },
-    handleAvatarSuccess(file, filelist) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-      console.log(this.imageUrl);
+    detailBackData() {
+      this.detailShow = false;
+      this.currow = {};
+    },
+    analyseBackData() {
+      this.analyseShow = false;
+      this.currow = {};
+    },
+    toAnalyse(form, e) {
+      this.detailShow = false;
+      this.analyseShow = true;
+      this.$set(this.currow, "image_path", e);
+      this.$set(this.currow, "form", form);
+    },
+    backdata(e) {
+      this.addImagesShow = false;
+      this.currow = {};
+    },
+    edit(row) {
+      row.status = "edit";
+      this.currow = row;
+      this.addImagesShow = true;
     },
     find() {
       this.loadReport();
@@ -416,15 +301,6 @@ export default {
     reset() {
       this.formInline = {};
       this.loadReport();
-    },
-    close() {
-      this.form = {};
-      this.$refs.upload.clearFiles();
-      this.dialogVisible = false;
-    },
-    handlePictureCardPreview(file) {
-      this.imageUrl = file.url;
-      this.dialogImg = true;
     },
     del(row) {
       this.$confirm("此操作将永久删除该信息吗, 是否继续?", "提示", {
@@ -492,28 +368,9 @@ export default {
         }
       });
     },
-    onImgChange() {},
-    handleRemove(file, fileList) {
-      for (var i = 0; i < fileList.length; i++) {
-        this.imageUrl = fileList[i].url;
-        break;
-      }
-      console.log(file);
-      if (file.status == "success") {
-        var id = file.name;
-        if (file.response != undefined && file.response.data.id != "") {
-          id = file.response.data.id;
-        }
-        delImages({ id: id }).then((response) => {
-          if (response) {
-            this.samples = response.data;
-          }
-        });
-      }
-    },
     add() {
-      this.status = "add";
-      this.dialogVisible = true;
+      this.currow.status = "add";
+      this.addImagesShow = true;
     },
   },
 };
@@ -522,6 +379,31 @@ export default {
 <style lang="scss" scoped>
 .diag-container {
   ::v-deep {
+    .el-upload-list__item {
+      transition: none !important;
+    }
+    .caozuoqu {
+      .el-card__body {
+        padding: 20px;
+      }
+    }
+    .add_images {
+      .el-dialog {
+        width: 90%;
+      }
+    }
+    .detail_images {
+      .el-dialog {
+        width: 92%;
+        .el-dialog__body {
+          padding: 10px;
+          padding-top: 0;
+        }
+      }
+      .el-card__body {
+        padding-top: 10px;
+      }
+    }
     .imglist {
       .el-card__body {
         margin: 10px;
@@ -530,7 +412,11 @@ export default {
     .el-table td {
       position: unset;
     }
-
+    .box-card-images {
+      .el-card__body {
+        padding-top: 0px;
+      }
+    }
     .item4 .el-form-item__label {
       margin-left: 3px;
       margin-right: 3px;
@@ -580,6 +466,50 @@ export default {
     .el-card__body {
       width: 100%;
       padding: 0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .image-slot {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: #f5f7fa;
+      color: #909399;
+      font-size: 40px;
+    }
+  }
+}
+.analyse-container {
+  ::v-deep {
+    .el-table td {
+      position: unset;
+    }
+
+    .el-form-item {
+      margin-bottom: 8px;
+    }
+    .el-card__header {
+      padding: 14px 20px;
+    }
+
+    .el-table th.head {
+      background: #f9f9f9;
+      border-bottom: 0;
+      color: #999;
+      font-size: 13px;
+    }
+
+    .el-table__expanded-cell {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .el-card__body {
+      width: 100%;
+      padding: 10px;
+      padding-top: 4px;
       border-radius: 4px;
       overflow: hidden;
     }
