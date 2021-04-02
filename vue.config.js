@@ -40,7 +40,7 @@ module.exports = {
         },
         // options placed here will be merged with default configuration and passed to electron-builder
         asar: false,
-        'appId': 'xhl_mall',
+        'appId': 'ferrography-data',
         'productName': '铁谱数据库系统', // 项目名，也是生成的安装文件名，即aDemo.exe
         'directories': {
           'output': './dist_electron' // 输出文件路径
