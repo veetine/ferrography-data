@@ -403,8 +403,6 @@ export default {
             this.imageUrl = this.fileList[0].url;
           }
           this.form = response.data;
-          console.log(this.fileList);
-          this.dialogVisible = true;
         }
       });
     },
@@ -416,8 +414,7 @@ export default {
       this.loadReport();
     },
     close() {
-      this.form = {};
-      this.dialogVisible = false;
+      this.$emit("backdata");
     },
     loadMotor() {
       getMotor().then((response) => {

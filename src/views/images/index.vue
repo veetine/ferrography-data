@@ -275,10 +275,12 @@ export default {
     detailBackData() {
       this.detailShow = false;
       this.currow = {};
+      this.loadReport();
     },
     analyseBackData() {
       this.analyseShow = false;
       this.currow = {};
+      this.loadReport();
     },
     toAnalyse(form, e) {
       this.detailShow = false;
@@ -289,6 +291,7 @@ export default {
     backdata(e) {
       this.addImagesShow = false;
       this.currow = {};
+      this.loadReport();
     },
     edit(row) {
       row.status = "edit";

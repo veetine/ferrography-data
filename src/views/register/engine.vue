@@ -24,11 +24,11 @@
             <el-table-column type="selection" width="65" />
             <el-table-column prop="id" label="编号" width="120">
             </el-table-column>
-            <el-table-column prop="motor_type" label="发动机型号">
+            <el-table-column prop="plane_type" label="飞机型号">
+            </el-table-column>
+            <el-table-column prop="plane_num" label="飞机编号">
             </el-table-column>
             <el-table-column prop="motor_num" label="发动机编号">
-            </el-table-column>
-            <el-table-column prop="plane_type" label="飞机型号">
             </el-table-column>
             <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
@@ -53,13 +53,13 @@
       width="35%"
     >
       <el-form ref="form" :model="form" label-width="100px" size="small">
-        <el-form-item label="发动机型号">
-          <el-input v-model="form.motor_type"></el-input>
-        </el-form-item>
-        <el-form-item label="发动机编号">
-          <el-input v-model="form.motor_num"></el-input> </el-form-item
-        ><el-form-item label="飞机型号">
+        <el-form-item label="飞机型号">
           <el-input v-model="form.plane_type"></el-input>
+        </el-form-item>
+        <el-form-item label="飞机编号">
+          <el-input v-model="form.plane_num"></el-input> </el-form-item
+        ><el-form-item label="发动机编号">
+          <el-input v-model="form.motor_num"></el-input>
         </el-form-item>
 
         <el-form-item style="margin-top: 30px">
