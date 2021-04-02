@@ -22,7 +22,7 @@
             >
               <el-form-item label="铁谱照片编号">
                 <el-input
-                  style="width: 505px"
+                  style="width: 500px"
                   disabled
                   v-model="selectImageNum"
                 />
@@ -33,6 +33,7 @@
                   v-model="form.plane_type"
                   size="small"
                   disabled
+                  style="width: 190px"
                   placeholder="请选择"
                 >
                   <el-option
@@ -49,6 +50,7 @@
                   v-model="form.motor_num"
                   size="small"
                   disabled
+                  style="width: 190px"
                   placeholder="请选择"
                 >
                   <el-option
@@ -65,6 +67,7 @@
                   disabled
                   v-model="form.motor_num"
                   size="small"
+                  style="width: 190px"
                   placeholder="请选择"
                 >
                   <el-option
@@ -79,6 +82,7 @@
               <el-form-item label="采样部位">
                 <el-select
                   disabled
+                  style="width: 190px"
                   v-model="form.sample_position"
                   size="small"
                   placeholder="请选择"
@@ -94,7 +98,7 @@
 
               <el-form-item label="采样日期">
                 <el-date-picker
-                  style="width: 191px"
+                  style="width: 190px"
                   disabled
                   v-model="form.sample_time"
                   type="date"
@@ -107,7 +111,7 @@
               <el-form-item label="发动机工作时间">
                 <el-input
                   disabled
-                  style="width: 191px"
+                  style="width: 190px"
                   v-model="form.motor_work_time"
                   placeholder="123"
                   size="small"
@@ -116,7 +120,7 @@
               </el-form-item>
               <el-form-item label="滑油工作时间">
                 <el-input
-                  style="width: 191px"
+                  style="width: 190px"
                   disabled
                   placeholder="滑油工作时间"
                   v-model="form.grease_work_time"
