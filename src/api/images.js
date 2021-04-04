@@ -8,3 +8,13 @@ export function delImages(params) {
     params
   })
 }
+
+
+export function addImages(data) {
+  return request({
+    url: '/images/upload',
+    method: 'post',
+    headers: { "content-Type": "multipart/form-data" },
+    data: data
+  })
+}

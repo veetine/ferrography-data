@@ -16,47 +16,27 @@
             <div slot="header" class="clearfix" style="text-align: center">
               <el-form label-width="100px" inline>
                 <el-form-item label="图片序号">
-                  <el-input
-                    size="small"
-                    disabled
-                    style="width: 210px"
-                    v-model="image_name"
+                  <el-input disabled v-model="image_name"
                 /></el-form-item>
                 <el-form-item label="图片编号">
-                  <el-input
-                    size="small"
-                    disabled
-                    style="width: 260px"
-                    v-model="image_num"
+                  <el-input disabled v-model="image_num"
                 /></el-form-item>
               </el-form>
             </div>
-            <el-upload
-              style="display: inline"
-              ref="upload"
-              action="http://localhost:4394/api/images/upload"
-              list-type="picture-card"
-              :on-remove="handleRemove"
-              :data="form"
-              :on-preview="handlePictureCardPreview"
-              :on-change="handleAvatarSuccess"
-              :auto-upload="false"
-              multiple
-              :limit="20"
-              :file-list="fileList"
-              :on-exceed="handleExceed"
-              :on-success="(value, file) => handleSuccessImg(value, file)"
-            >
-            </el-upload>
             <ul class="el-upload-list el-upload-list--picture-card">
               <li
                 tabindex="0"
-                class="el-upload-list__item is-success"
-                v-for="item in myFileList"
-                :key="item.name"
+                class="el-upload-list__item"
+                :class="[
+                  item.status == 'success' ? 'is-success' : '',
+                  item.selected ? 'select' : '',
+                ]"
+                v-for="(item, i) in fileList"
+                :key="i"
+                @click="handleImgClick(i)"
               >
                 <img
-                  src="@/assets/img/default-img.png"
+                  :src="item.url"
                   alt=""
                   class="el-upload-list__item-thumbnail"
                 />
@@ -64,9 +44,6 @@
                   <i class="el-icon-document"> </i>
                   0
                 </a>
-                <label class="el-upload-list__item-status-label">
-                  <i class="el-icon-upload-success el-icon-check"> </i>
-                </label>
                 <!---->
               </li>
             </ul>
@@ -82,7 +59,6 @@
               style="margin-top: 10px"
               ref="form"
               :model="form"
-              size="small"
               label-width="130px"
               class="zndfx"
             >
@@ -91,11 +67,7 @@
                 prop="plane_type"
                 :rules="[{ required: true, message: '请选择飞机型号' }]"
               >
-                <el-select
-                  v-model="form.plane_type"
-                  size="small"
-                  placeholder="请选择"
-                >
+                <el-select v-model="form.plane_type" placeholder="请选择">
                   <el-option
                     v-for="item in motors"
                     :key="item.id"
@@ -110,11 +82,7 @@
                 :rules="[{ required: true, message: '请选择飞机编号' }]"
                 prop="plane_num"
               >
-                <el-select
-                  v-model="form.plane_num"
-                  size="small"
-                  placeholder="请选择"
-                >
+                <el-select v-model="form.plane_num" placeholder="请选择">
                   <el-option
                     v-for="item in motors"
                     :key="item.id"
@@ -129,11 +97,7 @@
                 :rules="[{ required: true, message: '请选择发动机编号' }]"
                 prop="motor_num"
               >
-                <el-select
-                  v-model="form.motor_num"
-                  size="small"
-                  placeholder="请选择"
-                >
+                <el-select v-model="form.motor_num" placeholder="请选择">
                   <el-option
                     v-for="item in motors"
                     :key="item.id"
@@ -148,11 +112,7 @@
                 :rules="[{ required: true, message: '请选择采样部位' }]"
                 prop="sample_position"
               >
-                <el-select
-                  v-model="form.sample_position"
-                  size="small"
-                  placeholder="请选择"
-                >
+                <el-select v-model="form.sample_position" placeholder="请选择">
                   <el-option
                     v-for="item in samples"
                     :key="item.id"
@@ -168,7 +128,6 @@
                 prop="sample_time"
               >
                 <el-date-picker
-                  style="width: 191px"
                   v-model="form.sample_time"
                   type="date"
                   value-format="yyyy-MM-dd"
@@ -181,17 +140,13 @@
                 <el-input
                   v-model="form.motor_work_time"
                   placeholder="发动机工作时间"
-                  style="width: 191px"
-                  size="small"
                 >
                 </el-input>
               </el-form-item>
               <el-form-item label="滑油工作时间">
                 <el-input
                   placeholder="滑油工作时间"
-                  style="width: 191px"
                   v-model="form.grease_work_time"
-                  size="small"
                 >
                 </el-input>
               </el-form-item>
@@ -201,30 +156,40 @@
             <div slot="header" class="clearfix">
               <span>操作区</span>
             </div>
-            <el-form size="small" label-width="50px">
+            <el-form label-width="50px">
               <el-form-item style="margin-top: 15px">
                 <el-button
                   type="primary"
-                  size="small"
                   @click="addImage"
                   style="margin-right: 10px"
                   >添加图片</el-button
                 >
-                <el-button size="small" type="primary" @click="generate"
-                  >生成编号</el-button
+                <input
+                  style="display: none"
+                  ref="imgupload"
+                  type="file"
+                  multiple="multiple"
+                  accept="image/*"
+                  @change="handleFileChange($event)"
+                />
+                <el-button
+                  type="primary"
+                  @click="delImage"
+                  style="margin-right: 10px"
+                  >删除图片</el-button
                 >
+              </el-form-item>
+
+              <el-form-item style="margin-top: 15px">
+                <el-button type="primary" @click="generate">生成编号</el-button>
               </el-form-item>
               <el-form-item style="margin-top: 15px">
                 <el-button
                   type="primary"
-                  size="small"
                   @click="save"
-                  style="margin-right: 10px"
-                  >保存图片</el-button
+                  >保存</el-button
                 >
-                <el-button type="danger" size="small" @click="handleclose"
-                  >关闭</el-button
-                >
+                <el-button type="danger" @click="handleclose">关闭</el-button>
               </el-form-item>
             </el-form>
           </el-card>
@@ -244,7 +209,7 @@ import {
   getReportImages,
   addReport,
 } from "@/api/report";
-import { delImages } from "@/api/images";
+import { delImages, addImages } from "@/api/images";
 
 export default {
   mounted() {
@@ -267,20 +232,43 @@ export default {
       image_num: "",
       motors: [],
       form: {},
-      myFileList: [],
       fileList: [],
       samples: [],
       dialogImg: false,
+      imgfilesback: [],
+      index: -1,
     };
   },
   methods: {
+    delImage() {
+      if (this.index != -1) {
+        this.imgfilesback.splice(this.index, 1);
+        this.fileList.splice(this.index, 1);
+        this.fileList.push({
+          name: this.fileList.length + 1,
+          status: "ready",
+          default: true,
+          selected: false,
+          url: require("@/assets/img/default-img.png"),
+        });
+        this.$message({
+          type: "success",
+          message: "删除成功!",
+        });
+      } else {
+        this.$message({
+          type: "info",
+          message: "请选择图片!",
+        });
+      }
+    },
     loadReportImg() {
       if (this.row.status == "edit") {
         getReportImages({ id: this.row.id }).then((response) => {
           if (response) {
             if (response.data.images != null) {
               this.fileList = response.data.images.map((value, key) => {
-                this.myFileList.pop();
+                this.fileList.pop();
                 return {
                   name: value.id,
                   url: value.image_path,
@@ -296,17 +284,41 @@ export default {
     handleclose() {
       this.$emit("backdata");
     },
+    handleImgClick(k) {
+      for (var i = 0; i < this.fileList.length; i++) {
+        if (k == i) {
+          this.fileList[i].selected = true;
+        } else {
+          this.fileList[i].selected = false;
+        }
+      }
+      this.index = k;
+    },
+    handleFileChange(e) {
+      var _this = this;
+      var event = event || window.event;
+      var file = event.target.files;
+      var leng = file.length;
+      for (var i = 0; i < leng; i++) {
+        var reader = new FileReader();
+        _this.imgfilesback.push(file[i]);
+        reader.readAsDataURL(file[i]);
+        reader.onload = function (e) {
+          for (var i = 0; i < _this.fileList.length; i++) {
+            if (_this.fileList[i].default) {
+              _this.fileList[i].url = e.target.result;
+              _this.fileList[i].default = false;
+              break;
+            }
+          }
+        };
+      }
+    },
     addImage() {
-      document.querySelector('input[name="file"]').click();
+      this.$refs.imgupload.click();
     },
     generate() {
       this.save();
-    },
-    handleExceed(file, fileList) {
-      this.$message({
-        type: "warning",
-        message: "最多可上传20张图片",
-      });
     },
     loadSample() {
       getSample().then((response) => {
@@ -318,60 +330,20 @@ export default {
     save() {
       this.$refs["form"].validate((valid) => {
         if (valid) {
-          if (!this.form.id) {
-            addReport(this.form).then((response) => {
-              if (response) {
-                this.$set(this.form, "id", response.data);
-                this.$refs.upload.submit();
-                this.$message({
-                  type: "success",
-                  message: "操作成功!",
-                });
-              }
-            });
-          } else {
-            updReport(this.form).then((response) => {
-              if (response) {
-                this.$refs.upload.submit();
-                this.$message({
-                  type: "success",
-                  message: "操作成功!",
-                });
-              }
-            });
-          }
+          addReport(this.form).then((response) => {
+            if (response) {
+              const formData = new FormData();
+              formData.append("id", response.data); // 额外参数
+              formData.append("files", this.imgfilesback[0]);
+              addImages(formData).then((response) => {
+                console.log(response);
+              });
+            }
+          });
         } else {
           return false;
         }
       });
-    },
-    handleSuccessImg(response, file) {
-      file.image_num = response.data.image_num;
-    },
-    handleAvatarSuccess(file, fileList) {
-      if (file.status != "success") {
-        this.myFileList.pop();
-      }
-    },
-    handleRemove(file, fileList) {
-      this.myFileList.push({
-        name: this.myFileList.length,
-      });
-      if (file.status == "success") {
-        var id = file.name;
-        if (file.response != undefined && file.response.data.id != "") {
-          id = file.response.data.id;
-        }
-        delImages({ id: id }).then((response) => {
-          if (response) {
-            this.samples = response.data;
-          }
-        });
-      }
-    },
-    handlePictureCardPreview(file) {
-      this.image_name = file.name;
-      this.image_num = file.image_num;
     },
     close() {
       location.reload();
@@ -383,7 +355,13 @@ export default {
         }
       });
       for (var i = 0; i < 20; i++) {
-        this.myFileList.push({ name: i });
+        this.fileList.push({
+          name: i,
+          status: "ready",
+          default: true,
+          selected: false,
+          url: require("@/assets/img/default-img.png"),
+        });
       }
     },
   },
@@ -405,23 +383,9 @@ export default {
   }
 
   ::v-deep {
-    .myupload {
-      .el-upload-list__item-actions {
-        background: none;
-        .selected {
-          background: #f0f9eb;
-        }
-        .el-upload-list__item-preview {
-          width: 100%;
-          height: 100%;
-          display: block;
-          i {
-            display: none;
-          }
-        }
-        .el-upload-list__item-delete {
-          display: none;
-        }
+    .el-upload-list {
+      li.select {
+        border: 4px solid#FFC07B;
       }
     }
 
@@ -431,6 +395,9 @@ export default {
     .el-upload-list--picture-card {
       .el-upload-list__item {
         margin: 0 20px 8px 0;
+      }
+      .el-upload-list__item:focus {
+        outline: none;
       }
     }
 
