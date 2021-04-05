@@ -12,16 +12,17 @@ function initIpcMain(_mainWin) {
   // mainWin.webContens().opendevTopol()
   // 登录成功
   // ipcMain.on('login_success', loginSuccess)
-
+  mainWin.setResizable(true)
+  mainWin.setMaximizable(true)
   ipcMain.on('logout', logout)
 }
 
 function loginSuccess() {
   mainWin.setResizable(true)
   mainWin.setMaximizable(true)
-  if (!mainWin.isMaximized()) {
-    mainWin.maximize()
-  }
+  // if (!mainWin.isMaximized()) {
+  //   mainWin.maximize()
+  // }
 }
 
 function logout() {

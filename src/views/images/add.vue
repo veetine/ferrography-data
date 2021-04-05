@@ -15,12 +15,12 @@
           >
             <div slot="header" class="clearfix" style="text-align: center">
               <el-form label-width="100px" inline>
-                <el-form-item label="图片序号">
-                  <el-input disabled v-model="image_name"
-                /></el-form-item>
-                <el-form-item label="图片编号">
-                  <el-input disabled v-model="image_num"
-                /></el-form-item>
+                <el-form-item label="图片序号:">
+                  <span>{{ image_name }}</span>
+                </el-form-item>
+                <el-form-item label="图片编号:">
+                  <span>{{ image_num }}</span>
+                </el-form-item>
               </el-form>
             </div>
             <ul class="el-upload-list el-upload-list--picture-card">
@@ -44,6 +44,9 @@
                   <i class="el-icon-document"> </i>
                   0
                 </a>
+                <label class="el-upload-list__item-status-label"
+                  ><i class="el-icon-upload-success el-icon-check"></i
+                ></label>
                 <!---->
               </li>
             </ul>
@@ -140,12 +143,14 @@
                 <el-input
                   v-model="form.motor_work_time"
                   placeholder="发动机工作时间"
+                  style="width: 90%"
                 >
                 </el-input>
               </el-form-item>
               <el-form-item label="滑油工作时间">
                 <el-input
                   placeholder="滑油工作时间"
+                  style="width: 90%"
                   v-model="form.grease_work_time"
                 >
                 </el-input>
@@ -184,11 +189,7 @@
                 <el-button type="primary" @click="generate">生成编号</el-button>
               </el-form-item>
               <el-form-item style="margin-top: 15px">
-                <el-button
-                  type="primary"
-                  @click="save"
-                  >保存</el-button
-                >
+                <el-button type="primary" @click="save">保存</el-button>
                 <el-button type="danger" @click="handleclose">关闭</el-button>
               </el-form-item>
             </el-form>
@@ -237,13 +238,23 @@ export default {
       dialogImg: false,
       imgfilesback: [],
       index: -1,
+      file: {},
     };
   },
   methods: {
     delImage() {
       if (this.index != -1) {
-        this.imgfilesback.splice(this.index, 1);
-        this.fileList.splice(this.index, 1);
+        if (this.file.status == "success") {
+          delImages({ id: this.image_name }).then((response) => {
+            if (response) {
+              this.imgfilesback.splice(this.index, 1);
+              this.fileList.splice(this.index, 1);
+            }
+          });
+        } else {
+          is.imgfilesback.splice(this.index, 1);
+          this.fileList.splice(this.index, 1);
+        }
         this.fileList.push({
           name: this.fileList.length + 1,
           status: "ready",
@@ -268,17 +279,54 @@ export default {
           if (response) {
             if (response.data.images != null) {
               this.fileList = response.data.images.map((value, key) => {
-                this.fileList.pop();
                 return {
                   name: value.id,
                   url: value.image_path,
                   image_num: value.image_num,
+                  default: false,
+                  status: "success",
                 };
               });
+              this.fileList.map((item, index) => {
+                this.imgfilesback.push({ file: 1 });
+              });
+              var sum = 20 - this.fileList.length;
+              for (let i = 0; i < sum; i++) {
+                this.fileList.push({
+                  name: "",
+                  status: "ready",
+                  default: true,
+                  selected: false,
+                  image_num: "",
+                  url: require("@/assets/img/default-img.png"),
+                });
+              }
+            } else {
+              for (var i = 0; i < 20; i++) {
+                this.fileList.push({
+                  name: "",
+                  status: "ready",
+                  default: true,
+                  selected: false,
+                  image_num: "",
+                  url: require("@/assets/img/default-img.png"),
+                });
+              }
             }
             this.form = response.data;
           }
         });
+      } else {
+        for (var i = 0; i < 20; i++) {
+          this.fileList.push({
+            name: "",
+            status: "ready",
+            default: true,
+            selected: false,
+            image_num: "",
+            url: require("@/assets/img/default-img.png"),
+          });
+        }
       }
     },
     handleclose() {
@@ -288,6 +336,9 @@ export default {
       for (var i = 0; i < this.fileList.length; i++) {
         if (k == i) {
           this.fileList[i].selected = true;
+          this.image_num = this.fileList[i].image_num;
+          this.image_name = this.fileList[i].name;
+          this.file = this.fileList[i];
         } else {
           this.fileList[i].selected = false;
         }
@@ -304,7 +355,7 @@ export default {
         _this.imgfilesback.push(file[i]);
         reader.readAsDataURL(file[i]);
         reader.onload = function (e) {
-          for (var i = 0; i < _this.fileList.length; i++) {
+          for (let i = 0; i < _this.fileList.length; i++) {
             if (_this.fileList[i].default) {
               _this.fileList[i].url = e.target.result;
               _this.fileList[i].default = false;
@@ -313,6 +364,7 @@ export default {
           }
         };
       }
+      console.log(this.imgfilesback);
     },
     addImage() {
       this.$refs.imgupload.click();
@@ -332,12 +384,23 @@ export default {
         if (valid) {
           addReport(this.form).then((response) => {
             if (response) {
-              const formData = new FormData();
-              formData.append("id", response.data); // 额外参数
-              formData.append("files", this.imgfilesback[0]);
-              addImages(formData).then((response) => {
-                console.log(response);
-              });
+              this.$set(this.form, "id", response.data);
+              for (let i = 0; i < this.fileList.length; i++) {
+                if (
+                  this.fileList[i].status == "ready" &&
+                  !this.fileList[i].default
+                ) {
+                  const formData = new FormData();
+                  formData.append("id", response.data);
+                  formData.append("file", this.imgfilesback[i]);
+                  console.log(this.imgfilesback);
+                  addImages(formData).then((response) => {
+                    this.fileList[i].image_num = response.data.image_num;
+                    this.fileList[i].status = "success";
+                    this.fileList[i].name = response.data.id;
+                  });
+                }
+              }
             }
           });
         } else {
@@ -354,15 +417,6 @@ export default {
           this.motors = response.data;
         }
       });
-      for (var i = 0; i < 20; i++) {
-        this.fileList.push({
-          name: i,
-          status: "ready",
-          default: true,
-          selected: false,
-          url: require("@/assets/img/default-img.png"),
-        });
-      }
     },
   },
 };
@@ -383,6 +437,14 @@ export default {
   }
 
   ::v-deep {
+    .zndfx {
+      .el-date-editor {
+        width: 90%;
+      }
+      .el-select {
+        width: 90%;
+      }
+    }
     .el-upload-list {
       li.select {
         border: 4px solid#FFC07B;
