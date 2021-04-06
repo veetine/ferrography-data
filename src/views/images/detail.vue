@@ -3,6 +3,7 @@
     :visible.sync="open"
     style="width: 100%"
     center
+    class="abow_dialog"
     title="铁谱磨粒照片库"
     :before-close="handleclose"
   >
@@ -174,17 +175,11 @@
             <div slot="header" class="clearfix">
               <span>操作区</span>
             </div>
-            <el-form :inline="true" size="small">
+            <el-form :inline="true">
               <el-form-item style="margin-top: 15px">
-                <el-button type="primary" size="small" @click="analyse"
-                  >查看</el-button
-                >
-                <el-button type="primary" size="small" @click="del"
-                  >删除</el-button
-                >
-                <el-button type="danger" size="small" @click="handleclose"
-                  >关闭</el-button
-                >
+                <el-button type="primary" @click="analyse">查看</el-button>
+                <el-button type="primary" @click="del">删除</el-button>
+                <el-button type="danger" @click="handleclose">关闭</el-button>
               </el-form-item>
             </el-form>
           </el-card>
