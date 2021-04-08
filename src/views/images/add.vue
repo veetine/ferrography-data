@@ -35,10 +35,10 @@
                 :key="i"
                 @click="handleImgClick(i)"
               >
-                <img
+                <el-image
+                  style="width: 148px; height: 148px; margin-bottom: 10px"
+                  fit="cover"
                   :src="item.url"
-                  alt=""
-                  class="el-upload-list__item-thumbnail"
                 />
                 <a class="el-upload-list__item-name">
                   <i class="el-icon-document"> </i>
@@ -393,7 +393,6 @@ export default {
                   const formData = new FormData();
                   formData.append("id", response.data);
                   formData.append("file", this.imgfilesback[i]);
-                  console.log(this.imgfilesback);
                   addImages(formData).then((response) => {
                     this.fileList[i].image_num = response.data.image_num;
                     this.fileList[i].status = "success";
@@ -401,6 +400,10 @@ export default {
                   });
                 }
               }
+              this.$message({
+                type: "success",
+                message: "保存成功!",
+              });
             }
           });
         } else {

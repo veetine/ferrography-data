@@ -9,7 +9,7 @@
   >
     <div class="diag-container">
       <el-row>
-        <el-col :span="13">
+        <el-col :span="14">
           <el-card style="margin-right: 10px; margin-bottom: 10px">
             <div slot="header" class="clearfix">
               <span>图像信息</span>
@@ -18,7 +18,6 @@
               :inline="true"
               ref="form"
               :model="form"
-              size="small"
               label-width="110px"
             >
               <el-form-item label="铁谱照片编号">
@@ -32,7 +31,6 @@
               <el-form-item label="飞机型号">
                 <el-select
                   v-model="form.plane_type"
-                  size="small"
                   disabled
                   style="width: 190px"
                   placeholder="请选择"
@@ -49,7 +47,6 @@
               <el-form-item label="发动机编号">
                 <el-select
                   v-model="form.motor_num"
-                  size="small"
                   disabled
                   style="width: 190px"
                   placeholder="请选择"
@@ -67,7 +64,6 @@
                 <el-select
                   disabled
                   v-model="form.motor_num"
-                  size="small"
                   style="width: 190px"
                   placeholder="请选择"
                 >
@@ -85,7 +81,6 @@
                   disabled
                   style="width: 190px"
                   v-model="form.sample_position"
-                  size="small"
                   placeholder="请选择"
                 >
                   <el-option
@@ -115,7 +110,6 @@
                   style="width: 190px"
                   v-model="form.motor_work_time"
                   placeholder="123"
-                  size="small"
                 >
                 </el-input>
               </el-form-item>
@@ -125,7 +119,6 @@
                   disabled
                   placeholder="滑油工作时间"
                   v-model="form.grease_work_time"
-                  size="small"
                 >
                 </el-input>
               </el-form-item>
@@ -134,7 +127,7 @@
           <el-card style="margin-right: 10px">
             <div class="block" style="text-align: center; margin-bottom: 15px">
               <el-image
-                style="width: 400px; height: 370px; margin-bottom: 10px"
+                style="width: 600px; height: 500px"
                 fit="scale-down"
                 :src="imageUrl"
               >
@@ -146,11 +139,10 @@
           </el-card>
         </el-col>
 
-        <el-col :span="11">
+        <el-col :span="10">
           <el-card class="box-card-images">
             <el-table
               @row-click="handdleRow"
-              size="small"
               ref="multipleTable"
               highlight-current-row
               :data="fileList"
@@ -226,7 +218,7 @@ export default {
   },
   methods: {
     analyse() {
-      this.$emit("toanalyse", this.form, this.imageUrl);
+      this.$emit("toanalyse", this.form, this.imageUrl, this.selectImageNum);
     },
     del() {
       delImages({ id: this.id }).then((response) => {
@@ -259,6 +251,8 @@ export default {
           }
           if (this.fileList.length != 0) {
             this.imageUrl = this.fileList[0].url;
+            this.selectImageNum = this.fileList[0].image_num;
+            this.$refs.multipleTable.setCurrentRow(this.fileList[0]);
           }
           console.log(this.fileList);
           this.form = response.data;
@@ -364,9 +358,11 @@ export default {
     .el-card__body {
       width: 100%;
       padding: 10px;
+      padding-top: 4px;
       border-radius: 4px;
       overflow: hidden;
     }
+
     .image-slot {
       display: flex;
       justify-content: center;

@@ -15,7 +15,6 @@
 
           <el-table
             :data="motors"
-            size="small"
             style="width: 100%"
             header-cell-class-name="head"
             tooltip-effect="dark"
@@ -30,12 +29,12 @@
             </el-table-column>
             <el-table-column prop="motor_num" label="发动机编号">
             </el-table-column>
-            <el-table-column fixed="right" label="操作">
+            <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button type="text" size="small" @click="edit(scope.row)">
+                <el-button type="text"  @click="edit(scope.row)">
                   编辑
                 </el-button>
-                <el-button type="text" size="small" @click="del(scope.row)">
+                <el-button type="text"  @click="del(scope.row)">
                   移除
                 </el-button>
               </template>
@@ -52,7 +51,7 @@
       @close="close"
       width="35%"
     >
-      <el-form ref="form" :model="form" label-width="100px" size="small">
+      <el-form ref="form" :model="form" label-width="100px" >
         <el-form-item label="飞机型号">
           <el-input v-model="form.plane_type"></el-input>
         </el-form-item>
@@ -174,7 +173,11 @@ export default {
       padding: 0px;
     }
     .el-dialog {
+      height: 370px;
       border-radius: 8px;
+      .el-dialog__body {
+        padding: 25px 45px 30px 25px;
+      }
     }
     .el-table__header-wrapper .el-checkbox:before {
       content: "选择";

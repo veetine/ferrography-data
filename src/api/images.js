@@ -18,3 +18,20 @@ export function addImages(data) {
     data: data
   })
 }
+
+export function getImageDetail(params) {
+  return request({
+    url: '/images/detail',
+    method: 'get',
+    params
+  })
+}
+
+
+export function updImages(params) {
+  return request({
+    url: '/images/upd',
+    method: 'get',
+    params
+  })
+}

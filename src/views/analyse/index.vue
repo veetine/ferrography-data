@@ -5,7 +5,6 @@
         <el-form
           :inline="true"
           :model="formInline"
-          size="small"
           class="demo-form-inline row middle-xs"
           style="width: 100%; min-height: 60px; padding: 15px 15px 0 15px"
         >
@@ -68,7 +67,6 @@
 
           <el-form-item style="margin-right: 15px" label="采样日期">
             <el-date-picker
-              size="small"
               v-model="formInline.sample_time"
               type="date"
               value-format="yyyy-MM-dd"
@@ -80,7 +78,6 @@
 
           <el-form-item style="margin-right: 15px" label="分析日期">
             <el-date-picker
-              size="small"
               v-model="formInline.analyse_time"
               value-format="yyyy-MM-dd"
               type="date"
@@ -110,7 +107,6 @@
           </el-form-item>
         </el-form>
         <el-table
-          size="small"
           ref="multipleTable"
           :data="reports"
           tooltip-effect="dark"
@@ -181,7 +177,7 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="120">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="detail(scope.row)">
+              <el-button type="text" @click="detail(scope.row)">
                 查看
               </el-button>
             </template>
@@ -199,7 +195,7 @@
     >
       <el-row>
         <el-col :span="14">
-          <el-card style="margin-right: 10px; margin-bottom: 10px">
+          <el-card style="margin: 0 10px 10px 10px">
             <div slot="header" class="clearfix">
               <span>图像信息</span>
             </div>
@@ -207,15 +203,21 @@
               :inline="true"
               ref="form"
               :model="form"
-              size="small"
               label-width="110px"
-              class="zndfx"
             >
+              <el-form-item label="铁谱照片编号">
+                <el-input
+                  style="width: 500px"
+                  disabled
+                  v-model="selectImageNum"
+                />
+              </el-form-item>
+
               <el-form-item label="飞机型号">
                 <el-select
                   v-model="form.plane_type"
-                  size="small"
                   disabled
+                  style="width: 190px"
                   placeholder="请选择"
                 >
                   <el-option
@@ -227,18 +229,18 @@
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="发动机型号">
+              <el-form-item label="发动机编号">
                 <el-select
-                  v-model="form.motor_type"
-                  size="small"
+                  v-model="form.motor_num"
                   disabled
+                  style="width: 190px"
                   placeholder="请选择"
                 >
                   <el-option
                     v-for="item in motors"
                     :key="item.id"
-                    :label="item.motor_type"
-                    :value="item.motor_type"
+                    :label="item.motor_num"
+                    :value="item.motor_num"
                   />
                 </el-select>
               </el-form-item>
@@ -247,7 +249,7 @@
                 <el-select
                   disabled
                   v-model="form.motor_num"
-                  size="small"
+                  style="width: 190px"
                   placeholder="请选择"
                 >
                   <el-option
@@ -262,8 +264,8 @@
               <el-form-item label="采样部位">
                 <el-select
                   disabled
+                  style="width: 190px"
                   v-model="form.sample_position"
-                  size="small"
                   placeholder="请选择"
                 >
                   <el-option
@@ -277,9 +279,8 @@
 
               <el-form-item label="采样日期">
                 <el-date-picker
-                  style="width: 191px"
+                  style="width: 190px"
                   disabled
-                  size="small"
                   v-model="form.sample_time"
                   type="date"
                   value-format="yyyy-MM-dd"
@@ -291,32 +292,30 @@
               <el-form-item label="发动机工作时间">
                 <el-input
                   disabled
-                  style="width: 191px"
+                  style="width: 190px"
                   v-model="form.motor_work_time"
-                  placeholder="发动机工作时间"
-                  size="small"
+                  placeholder="123"
                 >
                 </el-input>
               </el-form-item>
               <el-form-item label="滑油工作时间">
                 <el-input
-                  style="width: 191px"
+                  style="width: 190px"
                   disabled
                   placeholder="滑油工作时间"
                   v-model="form.grease_work_time"
-                  size="small"
                 >
                 </el-input>
               </el-form-item>
             </el-form>
           </el-card>
-          <el-card class="box-card" style="margin-right: 10px">
+          <el-card class="box-card" style="margin: 10px">
             <div slot="header" class="clearfix">
               <span>图像</span>
             </div>
             <div class="block" style="text-align: center; margin-bottom: 15px">
               <el-image
-                style="width: 400px; height: 370px; margin-bottom: 10px"
+                style="width: 500px; height: 370px; margin-bottom: 10px"
                 fit="scale-down"
                 :src="imageUrl"
               >
@@ -336,8 +335,9 @@
                     style="float: left"
                   >
                     <el-image
-                      fit="contain"
-                      @click="selectImg(item.url)"
+                      fit="cover"
+                      style="width: 148px; height: 149px"
+                      @click="selectImg(item.url, item.image_num)"
                       :src="item.url"
                     />
                     <a class="el-upload-list__item-name"
@@ -359,7 +359,6 @@
             <el-tabs v-model="activeName" @tab-click="tabHandleClick">
               <el-tab-pane label="特征磨粒" name="tezhengmoli">
                 <el-table
-                  size="small"
                   ref="multipleTable"
                   :data="tableData"
                   tooltip-effect="dark"
@@ -368,86 +367,66 @@
                 >
                   <el-table-column label="磨粒类型">
                     <template slot-scope="scope">
-                      {{ scope.row.mltype }}
+                      {{ scope.row.moli_type }}
                     </template>
                   </el-table-column>
                   <el-table-column label="数量">
                     <template slot-scope="scope">
-                      {{ scope.row.number }}
+                      <el-input
+                        v-if="scope.row.edit"
+                        v-model="scope.row.number"
+                        placeholder="数量"
+                        type="number"
+                      ></el-input>
+                      <span v-else>{{ scope.row.number }}</span>
                     </template>
                   </el-table-column>
 
                   <el-table-column label="等级">
                     <template slot-scope="scope">
-                      {{ scope.row.level }}
+                      <el-input
+                        v-if="scope.row.edit"
+                        v-model="scope.row.level"
+                        placeholder="等级"
+                        type="number"
+                      ></el-input>
+                      <span v-else>{{ scope.row.level }}</span>
                     </template>
                   </el-table-column>
 
                   <el-table-column label="浓度">
                     <template slot-scope="scope">
-                      {{ scope.row.nongdu }}
+                      <el-input
+                        v-if="scope.row.edit"
+                        v-model="scope.row.conc"
+                        placeholder="浓度"
+                        type="number"
+                      ></el-input>
+                      <span v-else>{{ scope.row.conc }}</span>
                     </template>
                   </el-table-column>
                 </el-table>
               </el-tab-pane>
-              <el-tab-pane label="磨粒链" name="molilian">
-                <el-table
-                  size="small"
-                  ref="multipleTable"
-                  :data="tableData"
-                  tooltip-effect="dark"
-                  style="width: 100%"
-                  header-cell-class-name="head"
-                >
-                  <el-table-column label="磨粒类型">
-                    <template slot-scope="scope">
-                      {{ scope.row.mltype }}
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="数量">
-                    <template slot-scope="scope">
-                      {{ scope.row.number }}
-                    </template>
-                  </el-table-column>
 
-                  <el-table-column label="等级">
-                    <template slot-scope="scope">
-                      {{ scope.row.level }}
-                    </template>
-                  </el-table-column>
-
-                  <el-table-column label="浓度">
-                    <template slot-scope="scope">
-                      {{ scope.row.nongdu }}
-                    </template>
-                  </el-table-column>
-                </el-table></el-tab-pane
-              >
               <el-tab-pane label="分析结果" name="result">
-                <el-form
-                  style="margin-top: 10px"
-                  ref="form"
-                  :model="form"
-                  size="small"
-                  class="zndfx"
-                >
+                <el-form ref="form" :model="form" size="small" class="zndfx">
                   <el-form-item label="分析结果">
                     <el-input
-                      disabled
                       type="textarea"
                       :rows="6"
                       placeholder="请输入内容"
-                      v-model="textarea"
+                      disabled
+                      v-model="image.result"
                     >
                     </el-input>
                   </el-form-item>
                   <el-form-item label="处置意见">
                     <el-input
-                      disabled
                       type="textarea"
                       :rows="6"
+                      disabled
                       placeholder="请输入内容"
-                      v-model="textarea"
+                      v-model="image.idea"
                     >
                     </el-input>
                   </el-form-item>
@@ -472,6 +451,7 @@ import {
   addReport,
 } from "@/api/report";
 import { delImages } from "@/api/images";
+import { updImages, getImageDetail } from "@/api/images";
 
 export default {
   mounted() {
@@ -487,85 +467,14 @@ export default {
       reports: [],
       motors: [],
       samples: [],
-      tableData: [
-        {
-          mltype: "正常磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "疲劳剥落磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "层状磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "球形磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "疲劳剥块磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "黏着磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "切削磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "严重滑动磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "黑色氧化物磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "红色氧化物磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "腐蚀磨损磨粒",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-        {
-          mltype: "有色金属",
-          number: "98",
-          level: "10",
-          nongdu: "55",
-        },
-      ],
+      tableData: [],
       fileList: [],
       imageUrl: "",
       dialogVisible: false,
       textarea: "",
       activeName: "tezhengmoli",
+      selectImageNum: "",
+      image: {},
     };
   },
   methods: {
@@ -578,14 +487,26 @@ export default {
               return {
                 name: value.id,
                 url: value.image_path,
+                image_num: value.image_num,
               };
             });
           }
           if (this.fileList.length != 0) {
             this.imageUrl = this.fileList[0].url;
+            this.selectImageNum = this.fileList[0].image_num;
+            this.image = response.data.images[0];
+            for (let s = 0; s < this.image.tz_moli.length; s++) {
+              let obj = {
+                edit: false,
+                moli_type: this.image.tz_moli[s].moli_type,
+                number: this.image.tz_moli[s].number,
+                level: this.image.tz_moli[s].level,
+                conc: this.image.tz_moli[s].conc,
+              };
+              this.tableData.push(obj);
+            }
           }
           this.form = response.data;
-          console.log(this.fileList);
           this.dialogVisible = true;
         }
       });
@@ -626,8 +547,23 @@ export default {
       this.status = "add";
       this.dialogVisible = true;
     },
-    selectImg(url) {
+    selectImg(url, image_num) {
       this.imageUrl = url;
+      this.selectImageNum = image_num;
+      this.tableData = [];
+      getImageDetail({ id: this.image.id }).then((res) => {
+        var molist = res.data;
+        for (let s = 0; s < molist.length; s++) {
+          let obj = {
+            edit: false,
+            moli_type: molist[s].moli_type,
+            number: molist[s].number,
+            level: molist[s].level,
+            conc: molist[s].conc,
+          };
+          this.tableData.push(obj);
+        }
+      });
     },
   },
 };
@@ -641,7 +577,7 @@ export default {
     }
 
     .el-form-item {
-      margin-bottom: 8px;
+      margin-bottom: 20px;
     }
     .el-card__header {
       padding: 14px 20px;

@@ -5,7 +5,6 @@
         <el-form
           :inline="true"
           :model="formInline"
-          size="small"
           class="demo-form-inline row middle-xs"
           style="width: 100%; min-height: 60px; padding: 15px 15px 0 15px"
         >
@@ -68,7 +67,6 @@
 
           <el-form-item style="margin-right: 15px" label="采样日期">
             <el-date-picker
-              size="small"
               v-model="formInline.sample_time"
               type="date"
               value-format="yyyy-MM-dd"
@@ -80,7 +78,6 @@
 
           <el-form-item style="margin-right: 15px" label="分析日期">
             <el-date-picker
-              size="small"
               v-model="formInline.analyse_time"
               value-format="yyyy-MM-dd"
               type="date"
@@ -113,7 +110,6 @@
           </el-form-item>
         </el-form>
         <el-table
-          size="small"
           ref="multipleTable"
           :data="reports"
           tooltip-effect="dark"
@@ -182,15 +178,15 @@
               {{ scope.row.dilution }}
             </template>
           </el-table-column>
-          <el-table-column fixed="right" label="操作" width="120">
+          <el-table-column fixed="right" label="操作" width="135">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="detail(scope.row)">
+              <el-button type="text"  @click="detail(scope.row)">
                 查看
               </el-button>
-              <el-button type="text" size="small" @click="edit(scope.row)">
+              <el-button type="text"  @click="edit(scope.row)">
                 编辑
               </el-button>
-              <el-button type="text" size="small" @click="del(scope.row)">
+              <el-button type="text"  @click="del(scope.row)">
                 移除
               </el-button>
             </template>
@@ -282,10 +278,11 @@ export default {
       this.currow = {};
       this.loadReport();
     },
-    toAnalyse(form, e) {
+    toAnalyse(form, e,f) {
       this.detailShow = false;
       this.analyseShow = true;
       this.$set(this.currow, "image_path", e);
+       this.$set(this.currow, "image_num", f);
       this.$set(this.currow, "form", form);
     },
     backdata(e) {
