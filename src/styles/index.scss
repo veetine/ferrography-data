@@ -357,10 +357,12 @@ div:focus {
   justify-content: center;
   align-items: Center;
   overflow: hidden;
+
   .el-dialog {
     margin: 0 auto !important;
     height: 90%;
     overflow: hidden;
+
     .el-dialog__body {
       position: absolute;
       left: 0;
@@ -371,6 +373,15 @@ div:focus {
       z-index: 1;
       overflow: hidden;
       overflow-y: auto;
+    }
+  }
+}
+
+.el-form {
+  .el-form-item {
+    .el-input__inner {
+      color: #606266;
+      font-weight: 700;
     }
   }
 }

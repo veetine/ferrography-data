@@ -8,7 +8,7 @@
   >
     <div class="container">
       <el-row>
-        <el-col :span="16">
+        <el-col :span="17">
           <el-card
             style="margin-right: 10px; margin-bottom: 10px; min-height: 475px"
             class="imglist"
@@ -53,7 +53,7 @@
           </el-card>
         </el-col>
 
-        <el-col :span="8">
+        <el-col :span="7">
           <el-card style="padding-right: 15px">
             <div slot="header" class="clearfix">
               <span>信息录入</span>
@@ -441,6 +441,9 @@ export default {
 
   ::v-deep {
     .zndfx {
+      .el-form-item {
+        margin-bottom: 12px;
+      }
       .el-date-editor {
         width: 90%;
       }
@@ -472,7 +475,6 @@ export default {
     .imglist {
       .el-card__body {
         margin-top: 10px;
-        padding-left: 30px;
       }
       .el-card__header {
         padding: 3px 0;

@@ -203,6 +203,7 @@
               :inline="true"
               ref="form"
               :model="form"
+              class="infolfform"
               label-width="110px"
             >
               <el-form-item label="铁谱照片编号">
@@ -434,6 +435,19 @@
               </el-tab-pane>
             </el-tabs>
           </el-card>
+           <el-card
+            style="margin-top: 10px; margin-bottom: 10px"
+            class="caozuoqu"
+          >
+            <div slot="header" class="clearfix">
+              <span>操作区</span>
+            </div>
+            <el-form :inline="true">
+              <el-form-item style="margin-top: 15px">
+                <el-button type="danger" @click="close">关闭</el-button>
+              </el-form-item>
+            </el-form>
+          </el-card>
         </el-col>
       </el-row>
     </el-dialog>
@@ -472,7 +486,7 @@ export default {
       imageUrl: "",
       dialogVisible: false,
       textarea: "",
-      activeName: "tezhengmoli",
+      activeName: "result",
       selectImageNum: "",
       image: {},
     };
@@ -574,6 +588,11 @@ export default {
   ::v-deep {
     .el-table td {
       position: unset;
+    }
+    .infolfform {
+      .el-form-item {
+        margin-bottom: 8px;
+      }
     }
 
     .el-form-item {

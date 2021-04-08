@@ -147,7 +147,7 @@
               highlight-current-row
               :data="fileList"
               tooltip-effect="dark"
-              style="width: 100%; min-height: 260px"
+              style="width: 100%; min-height: 295px"
               header-cell-class-name="head"
             >
               <el-table-column label="图像序号" type="index" width="150">
