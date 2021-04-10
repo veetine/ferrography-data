@@ -100,6 +100,13 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 135px;
+  z-index: 1500;
+  background: #ffff;
   .ul-line {
     padding-top: 5px;
     ul {
@@ -108,10 +115,19 @@ export default {
       white-space: nowrap;
       li {
         display: inline-block;
-        margin-right: 5px;
+        margin-right: 6px;
         img {
-          width: 55px;
-          height: 55px;
+          width: 65px;
+          height: 65px;
+        }
+      }
+    }
+    .editimg {
+      li {
+        img {
+          width: 45px;
+          height: 45px;
+          margin-bottom: 10px;
         }
       }
     }

@@ -20,6 +20,7 @@ export default {
 <style scoped>
 .app-main {
   /*50 = navbar  */
+   margin-top: 135px;
   min-height: calc(100vh - 50px);
   width: 100%;
   position: relative;

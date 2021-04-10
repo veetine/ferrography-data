@@ -442,7 +442,7 @@ export default {
   ::v-deep {
     .zndfx {
       .el-form-item {
-        margin-bottom: 12px;
+        margin-bottom: 18px;
       }
       .el-date-editor {
         width: 90%;
