@@ -1,204 +1,217 @@
 <template>
-  <el-dialog
-    :visible.sync="open"
-    style="width: 100%"
-    center
-    class="abow_dialog"
-    title="铁谱磨粒照片库"
-    :before-close="handleclose"
-  >
-    <div class="diag-container">
-      <el-row>
-        <el-col :span="14">
-          <el-card style="margin-right: 10px; margin-bottom: 10px">
-            <div slot="header" class="clearfix">
-              <span>图像信息</span>
-            </div>
-            <el-form
-              :inline="true"
-              ref="form"
-              :model="form"
-              label-width="110px"
+  <div class="diag-container">
+    <el-row>
+      <el-col :span="17">
+        <el-form
+          style="padding-left: 30px"
+          :inline="true"
+          ref="form"
+          size="small"
+          :model="form"
+          label-width="100px"
+        >
+          <el-form-item label="铁谱照片编号">
+            <el-input style="width: 490px" disabled v-model="selectImageNum" />
+          </el-form-item>
+
+          <el-form-item label="飞机型号">
+            <el-select
+              v-model="form.plane_type"
+              disabled
+              style="width: 190px"
+              placeholder="请选择"
             >
-              <el-form-item label="铁谱照片编号">
-                <el-input
-                  style="width: 500px"
-                  disabled
-                  v-model="selectImageNum"
-                />
-              </el-form-item>
-
-              <el-form-item label="飞机型号">
-                <el-select
-                  v-model="form.plane_type"
-                  disabled
-                  style="width: 190px"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in motors"
-                    :key="item.id"
-                    :label="item.plane_type"
-                    :value="item.plane_type"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="发动机编号">
-                <el-select
-                  v-model="form.motor_num"
-                  disabled
-                  style="width: 190px"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in motors"
-                    :key="item.id"
-                    :label="item.motor_num"
-                    :value="item.motor_num"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="发动机编号">
-                <el-select
-                  disabled
-                  v-model="form.motor_num"
-                  style="width: 190px"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in motors"
-                    :key="item.id"
-                    :label="item.motor_num"
-                    :value="item.motor_num"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="采样部位">
-                <el-select
-                  disabled
-                  style="width: 190px"
-                  v-model="form.sample_position"
-                  placeholder="请选择"
-                >
-                  <el-option
-                    v-for="item in samples"
-                    :key="item.id"
-                    :label="item.position"
-                    :value="item.position"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item label="采样日期">
-                <el-date-picker
-                  style="width: 190px"
-                  disabled
-                  v-model="form.sample_time"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  placeholder="采样日期"
-                >
-                </el-date-picker>
-              </el-form-item>
-
-              <el-form-item label="发动机工作时间">
-                <el-input
-                  disabled
-                  style="width: 190px"
-                  v-model="form.motor_work_time"
-                  placeholder="123"
-                >
-                </el-input>
-              </el-form-item>
-              <el-form-item label="滑油工作时间">
-                <el-input
-                  style="width: 190px"
-                  disabled
-                  placeholder="滑油工作时间"
-                  v-model="form.grease_work_time"
-                >
-                </el-input>
-              </el-form-item>
-            </el-form>
-          </el-card>
-          <el-card style="margin-right: 10px">
-            <div class="block" style="text-align: center; margin-bottom: 15px">
-              <el-image
-                style="width: 600px; height: 500px"
-                fit="scale-down"
-                :src="imageUrl"
-              >
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </div>
-          </el-card>
-        </el-col>
-
-        <el-col :span="10">
-          <el-card class="box-card-images">
-            <el-table
-              @row-click="handdleRow"
-              ref="multipleTable"
-              highlight-current-row
-              :data="fileList"
-              tooltip-effect="dark"
-              style="width: 100%; min-height: 295px"
-              header-cell-class-name="head"
+              <el-option
+                v-for="item in motors"
+                :key="item.id"
+                :label="item.plane_type"
+                :value="item.plane_type"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="分析日期">
+            <el-date-picker
+              style="width: 190px"
+              disabled
+              v-model="form.created_at"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="分析日期"
             >
-              <el-table-column label="图像序号" type="index" width="150">
-              </el-table-column>
-              <el-table-column label="图像编号">
-                <template slot-scope="scope">
-                  {{ scope.row.image_num }}
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
+            </el-date-picker>
+          </el-form-item>
 
-          <el-card
-            style="margin-top: 10px; margin-bottom: 10px"
-            class="caozuoqu"
+          <el-form-item label="采样日期">
+            <el-date-picker
+              style="width: 190px"
+              disabled
+              v-model="form.sample_time"
+              type="date"
+              value-format="yyyy-MM-dd"
+              placeholder="采样日期"
+            >
+            </el-date-picker>
+          </el-form-item>
+
+          <el-form-item label="飞机编号">
+            <el-input
+              style="width: 190px"
+              disabled
+              placeholder="飞机编号"
+              v-model="form.plane_num"
+            >
+            </el-input>
+          </el-form-item>
+
+          <el-form-item label="采样部位">
+            <el-select
+              disabled
+              style="width: 190px"
+              v-model="form.sample_position"
+              placeholder="采样部位"
+            >
+              <el-option
+                v-for="item in samples"
+                :key="item.id"
+                :label="item.position"
+                :value="item.position"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="滑油牌号">
+            <el-select
+              disabled
+              v-model="form.brand"
+              style="width: 190px"
+              placeholder="滑油牌号"
+            >
+              <el-option
+                v-for="item in graeases"
+                :key="item.id"
+                :label="item.brand"
+                :value="item.brand"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="发动机编号">
+            <el-select
+              disabled
+              v-model="form.motor_num"
+              style="width: 190px"
+              placeholder="发动机编号"
+            >
+              <el-option
+                v-for="item in motors"
+                :key="item.id"
+                :label="item.motor_num"
+                :value="item.motor_num"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="制谱用油样量">
+            <el-select
+              disabled
+              v-model="form.dosage"
+              style="width: 190px"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in oils"
+                :key="item.id"
+                :label="item.dosage"
+                :value="item.dosage"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="稀释比">
+            <el-select
+              disabled
+              v-model="form.ratio"
+              style="width: 190px"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in dilutions"
+                :key="item.id"
+                :label="item.ratio"
+                :value="item.ratio"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="总工作时间">
+            <el-input
+              disabled
+              style="width: 190px"
+              v-model="form.sum_work_time"
+              placeholder="123"
+            >
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <div class="block" style="text-align: center; margin-bottom: 15px">
+          <el-image
+            style="width: 600px; height: 500px"
+            fit="scale-down"
+            :src="imageUrl"
           >
-            <div slot="header" class="clearfix">
-              <span>操作区</span>
+            <div slot="error" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
             </div>
-            <el-form :inline="true">
-              <el-form-item style="margin-top: 15px">
-                <el-button type="primary" @click="analyse">查看</el-button>
-                <el-button type="primary" @click="del">删除</el-button>
-                <el-button type="danger" @click="handleclose">关闭</el-button>
-              </el-form-item>
-            </el-form>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-  </el-dialog>
+          </el-image>
+        </div>
+      </el-col>
+      <el-col :span="7">
+        <el-table
+          @row-click="handdleRow"
+          ref="multipleTable"
+          highlight-current-row
+          :data="fileList"
+          tooltip-effect="dark"
+          style="width: 100%; min-height: 400px"
+          header-cell-class-name="head"
+        >
+          <el-table-column label="图像序号" type="index" width="150">
+          </el-table-column>
+          <el-table-column label="图像编号">
+            <template slot-scope="scope">
+              {{ scope.row.image_num }}
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <div slot="header" class="clearfix">
+          <span>操作区</span>
+        </div>
+        <el-form :inline="true">
+          <el-form-item style="margin-top: 15px">
+            <el-button type="primary" @click="analyse">查看</el-button>
+            <el-button type="primary" @click="del">删除</el-button>
+            <el-button type="danger" @click="handleclose">关闭</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-import { getMotor } from "@/api/motor";
-import { getSample } from "@/api/sample";
-import { getReport, getReportImages } from "@/api/report";
+import { getReportImages } from "@/api/report";
 import { delImages } from "@/api/images";
+import { getFormData } from "@/api/motor";
 
 export default {
   mounted() {
-    this.loadMotor();
-    this.loadSample();
-    this.loadReport();
+    this.loadFormData();
     this.loadReportImg();
   },
   data() {
     return {
-      open: true,
-      picker: "",
-      form: { picker: "" },
+      form: {},
       reports: [],
       motors: [],
       samples: [],
@@ -206,25 +219,36 @@ export default {
       imageUrl: "",
       selectImageNum: "",
       id: "",
+      image: {},
+      dilutions: [],
+      oils: [],
+      graeases: [],
     };
   },
-  props: {
-    row: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-  },
   methods: {
-    analyse() {
-      this.$emit("toanalyse", this.form, this.imageUrl, this.selectImageNum);
+    loadFormData() {
+      getFormData().then((response) => {
+        if (response) {
+          this.motors = response.data.motors;
+          this.samples = response.data.samples;
+          this.graeases = response.data.graeases;
+          this.oils = response.data.oils;
+          this.dilutions = response.data.dilutions;
+        }
+      });
     },
     del() {
       delImages({ id: this.id }).then((response) => {
         if (response) {
           this.loadReportImg();
         }
+      });
+    },
+    analyse() {
+      console.log(this.$route.query.id);
+      this.$router.push({
+        path: "/analyse/detail",
+        query: { id: this.$route.query.id },
       });
     },
     handdleRow(row, event, column) {
@@ -234,11 +258,11 @@ export default {
       this.selectImageNum = row.image_num;
     },
     handleclose() {
-      this.$emit("backdata");
+      this.$router.push({ path: "/images/index" });
     },
     tabHandleClick(tab, event) {},
     loadReportImg() {
-      getReportImages({ id: this.row.id }).then((response) => {
+      getReportImages({ id: this.$route.query.id }).then((response) => {
         if (response) {
           if (response.data.images != null) {
             this.fileList = response.data.images.map((value, key) => {
@@ -253,43 +277,11 @@ export default {
             this.imageUrl = this.fileList[0].url;
             this.selectImageNum = this.fileList[0].image_num;
             this.$refs.multipleTable.setCurrentRow(this.fileList[0]);
+            this.id = this.fileList[0].id;
           }
-          console.log(this.fileList);
           this.form = response.data;
         }
       });
-    },
-    find() {
-      this.loadReport();
-    },
-    reset() {
-      this.formInline = {};
-      this.loadReport();
-    },
-    loadMotor() {
-      getMotor().then((response) => {
-        if (response) {
-          this.motors = response.data;
-        }
-      });
-    },
-    loadReport() {
-      getReport(this.formInline).then((response) => {
-        if (response) {
-          this.reports = response.data;
-        }
-      });
-    },
-    loadSample() {
-      getSample().then((response) => {
-        if (response) {
-          this.samples = response.data;
-        }
-      });
-    },
-    add() {
-      this.status = "add";
-      this.dialogVisible = true;
     },
   },
 };

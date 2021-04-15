@@ -3,16 +3,16 @@
     <el-row>
       <el-col :span="24">
         <el-table
-          :data="samples"
+          :data="oils"
           style="width: 100%"
           header-cell-class-name="head"
           tooltip-effect="dark"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="80" />
-          <el-table-column prop="id" label="编号">
+          <el-table-column prop="id" label="编号"> </el-table-column>
+          <el-table-column prop="dosage" label="制谱用油样量（ml）">
           </el-table-column>
-          <el-table-column prop="position" label="采样部位"> </el-table-column>
           <el-table-column>
             <template slot="header">
               <el-button type="primary" @click="add">添加</el-button>
@@ -33,9 +33,9 @@
       @close="close"
       width="35%"
     >
-      <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="采样部位">
-          <el-input v-model="form.position"></el-input>
+      <el-form ref="form" :model="form" label-width="120px">
+        <el-form-item label="制谱用油样量">
+          <el-input v-model="form.dosage"></el-input>
         </el-form-item>
         <el-form-item style="margin-top: 30px">
           <el-button type="primary" @click="onSubmit">提 交</el-button>
@@ -47,10 +47,10 @@
 </template>
 
 <script>
-import { addSample, getSample, delSample, updSample } from "@/api/sample";
+import { addOil, getOil, delOil, updOil } from "@/api/oil";
 export default {
   mounted() {
-    this.loadSample();
+    this.loadOil();
   },
   methods: {
     del(row) {
@@ -60,13 +60,13 @@ export default {
         type: "warning",
       })
         .then(() => {
-          delSample({ id: row.id }).then((response) => {
+          delOil({ id: row.id }).then((response) => {
             if (response.code == 0) {
               this.$message({
                 type: "success",
                 message: "删除成功!",
               });
-              this.loadSample();
+              this.loadOil();
             }
           });
         })
@@ -75,16 +75,16 @@ export default {
     close() {
       this.form = {};
     },
-    loadSample() {
-      getSample().then((response) => {
+    loadOil() {
+      getOil().then((response) => {
         if (response) {
-          this.samples = response.data;
+          this.oils = response.data;
         }
       });
     },
     onSubmit() {
-      if (this.status == "添加采样信息") {
-        addSample(this.form).then((response) => {
+      if (this.status == "添加") {
+        addOil(this.form).then((response) => {
           if (response.code == 0) {
             this.$message({
               type: "success",
@@ -92,11 +92,11 @@ export default {
             });
             this.dialogVisible = false;
             this.form = {};
-            this.loadSample();
+            this.loadOil();
           }
         });
       } else {
-        updSample(this.form).then((response) => {
+        updOil(this.form).then((response) => {
           if (response.code == 0) {
             this.$message({
               type: "success",
@@ -104,7 +104,7 @@ export default {
             });
             this.dialogVisible = false;
             this.form = {};
-            this.loadSample();
+            this.loadOil();
           }
         });
       }
@@ -114,19 +114,19 @@ export default {
     },
     add() {
       this.dialogVisible = true;
-      this.status = "添加采样信息";
+      this.status = "添加";
     },
     edit(row) {
       this.form = JSON.parse(JSON.stringify(row));
       this.dialogVisible = true;
-      this.status = "编辑采样信息";
+      this.status = "编辑";
     },
   },
   data() {
     return {
       status: "",
       dialogVisible: false,
-      samples: [],
+      oils: [],
       form: {},
     };
   },

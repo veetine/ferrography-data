@@ -1,208 +1,277 @@
 <template>
-  <el-dialog
-    :visible.sync="open"
-    style="width: 100%"
-    center
-    title="添加照片库"
-    :before-close="handleclose"
-  >
-    <div class="container">
-      <el-row>
-        <el-col :span="17">
-          <el-card
-            style="margin-right: 10px; margin-bottom: 10px; min-height: 475px"
-            class="imglist"
-          >
-            <div slot="header" class="clearfix" style="text-align: center">
-              <el-form label-width="100px" inline>
-                <el-form-item label="图片序号:">
-                  <span>{{ image_name }}</span>
-                </el-form-item>
-                <el-form-item label="图片编号:">
-                  <span>{{ image_num }}</span>
-                </el-form-item>
-              </el-form>
-            </div>
-            <ul class="el-upload-list el-upload-list--picture-card">
-              <li
-                tabindex="0"
-                class="el-upload-list__item"
-                :class="[
-                  item.status == 'success' ? 'is-success' : '',
-                  item.selected ? 'select' : '',
-                ]"
-                v-for="(item, i) in fileList"
-                :key="i"
-                @click="handleImgClick(i)"
-              >
-                <el-image
-                  style="width: 148px; height: 148px; margin-bottom: 10px"
-                  fit="cover"
-                  :src="item.url"
-                />
-                <a class="el-upload-list__item-name">
-                  <i class="el-icon-document"> </i>
-                  0
-                </a>
-                <label class="el-upload-list__item-status-label"
-                  ><i class="el-icon-upload-success el-icon-check"></i
-                ></label>
-                <!---->
-              </li>
-            </ul>
-          </el-card>
-        </el-col>
-
-        <el-col :span="7">
-          <el-card style="padding-right: 15px">
-            <div slot="header" class="clearfix">
-              <span>信息录入</span>
-            </div>
-            <el-form
-              style="margin-top: 10px"
-              ref="form"
-              :model="form"
-              label-width="130px"
-              class="zndfx"
+  <div class="container">
+    <el-row>
+      <el-col :span="13">
+        <el-card
+          style="margin-right: 10px; margin-bottom: 10px; min-height: 475px"
+          class="imglist"
+        >
+          <div slot="header" class="clearfix" style="text-align: center">
+            <el-form label-width="100px" inline>
+              <el-form-item label="图片序号:">
+                <span>{{ image_name }}</span>
+              </el-form-item>
+              <el-form-item label="图片编号:">
+                <span>{{ image_num }}</span>
+              </el-form-item>
+            </el-form>
+          </div>
+          <ul class="el-upload-list el-upload-list--picture-card">
+            <li
+              tabindex="0"
+              class="el-upload-list__item"
+              :class="[
+                item.status == 'success' ? 'is-success' : '',
+                item.selected ? 'select' : '',
+              ]"
+              v-for="(item, i) in fileList"
+              :key="i"
+              @click="handleImgClick(i)"
             >
-              <el-form-item
-                label="飞机型号"
-                prop="plane_type"
-                :rules="[{ required: true, message: '请选择飞机型号' }]"
-              >
-                <el-select v-model="form.plane_type" placeholder="请选择">
-                  <el-option
-                    v-for="item in motors"
-                    :key="item.id"
-                    :label="item.plane_type"
-                    :value="item.plane_type"
-                  />
-                </el-select>
-              </el-form-item>
+              <el-image
+                style="width: 148px; height: 148px; margin-bottom: 10px"
+                fit="cover"
+                :src="item.url"
+              />
+              <a class="el-upload-list__item-name">
+                <i class="el-icon-document"> </i>
+                0
+              </a>
+              <label class="el-upload-list__item-status-label"
+                ><i class="el-icon-upload-success el-icon-check"></i
+              ></label>
+              <!---->
+            </li>
+          </ul>
+        </el-card>
+      </el-col>
 
-              <el-form-item
-                label="飞机编号"
-                :rules="[{ required: true, message: '请选择飞机编号' }]"
-                prop="plane_num"
-              >
-                <el-select v-model="form.plane_num" placeholder="请选择">
-                  <el-option
-                    v-for="item in motors"
-                    :key="item.id"
-                    :label="item.plane_num"
-                    :value="item.plane_num"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item
-                label="发动机编号"
-                :rules="[{ required: true, message: '请选择发动机编号' }]"
-                prop="motor_num"
-              >
-                <el-select v-model="form.motor_num" placeholder="请选择">
-                  <el-option
-                    v-for="item in motors"
-                    :key="item.id"
-                    :label="item.motor_num"
-                    :value="item.motor_num"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item
-                label="采样部位"
-                :rules="[{ required: true, message: '请选择采样部位' }]"
-                prop="sample_position"
-              >
-                <el-select v-model="form.sample_position" placeholder="请选择">
-                  <el-option
-                    v-for="item in samples"
-                    :key="item.id"
-                    :label="item.position"
-                    :value="item.position"
-                  />
-                </el-select>
-              </el-form-item>
-
-              <el-form-item
-                label="采样日期"
-                :rules="[{ required: true, message: '请选择采样日期' }]"
-                prop="sample_time"
-              >
-                <el-date-picker
-                  v-model="form.sample_time"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  placeholder="采样日期"
-                >
-                </el-date-picker>
-              </el-form-item>
-
-              <el-form-item label="发动机工作时间">
-                <el-input
-                  v-model="form.motor_work_time"
-                  placeholder="发动机工作时间"
-                  style="width: 90%"
-                >
-                </el-input>
-              </el-form-item>
-              <el-form-item label="滑油工作时间">
-                <el-input
-                  placeholder="滑油工作时间"
-                  style="width: 90%"
-                  v-model="form.grease_work_time"
-                >
-                </el-input>
-              </el-form-item>
-            </el-form>
-          </el-card>
-          <el-card style="margin-top: 10px">
-            <div slot="header" class="clearfix">
-              <span>操作区</span>
-            </div>
-            <el-form label-width="50px">
-              <el-form-item style="margin-top: 15px">
-                <el-button
-                  type="primary"
-                  @click="addImage"
-                  style="margin-right: 10px"
-                  >添加图片</el-button
-                >
-                <input
-                  style="display: none"
-                  ref="imgupload"
-                  type="file"
-                  multiple="multiple"
-                  accept="image/*"
-                  @change="handleFileChange($event)"
+      <el-col :span="11">
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>信息录入</span>
+          </div>
+          <el-form
+            :inline="true"
+            style="margin-top: 10px"
+            ref="form"
+            :model="form"
+            label-width="110px"
+            class="zndfx"
+          >
+            <el-form-item
+              label="飞机型号"
+              prop="plane_type"
+              :rules="[{ required: true, message: '请选择飞机型号' }]"
+            >
+              <el-select v-model="form.plane_type" placeholder="请选择">
+                <el-option
+                  v-for="item in motors"
+                  :key="item.id"
+                  :label="item.plane_type"
+                  :value="item.plane_type"
                 />
-                <el-button
-                  type="primary"
-                  @click="delImage"
-                  style="margin-right: 10px"
-                  >删除图片</el-button
-                >
-              </el-form-item>
+              </el-select>
+            </el-form-item>
 
-              <el-form-item style="margin-top: 15px">
-                <el-button type="primary" @click="generate">生成编号</el-button>
-              </el-form-item>
-              <el-form-item style="margin-top: 15px">
-                <el-button type="primary" @click="save">保存</el-button>
-                <el-button type="danger" @click="handleclose">关闭</el-button>
-              </el-form-item>
-            </el-form>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-  </el-dialog>
+            <el-form-item
+              label="飞机编号"
+              :rules="[{ required: true, message: '请选择飞机编号' }]"
+              prop="plane_num"
+            >
+              <el-select v-model="form.plane_num" placeholder="请选择">
+                <el-option
+                  v-for="item in motors"
+                  :key="item.id"
+                  :label="item.plane_num"
+                  :value="item.plane_num"
+                />
+              </el-select>
+            </el-form-item>
+
+            <el-form-item
+              label="发动机型号"
+              :rules="[{ required: true, message: '请选择发动机型号' }]"
+              prop="motor_type"
+            >
+              <el-select v-model="form.motor_type" placeholder="请选择">
+                <el-option
+                  v-for="item in motors"
+                  :key="item.id"
+                  :label="item.motor_type"
+                  :value="item.motor_type"
+                />
+              </el-select>
+            </el-form-item>
+
+            <el-form-item
+              label="发动机编号"
+              :rules="[{ required: true, message: '请选择发动机编号' }]"
+              prop="motor_num"
+            >
+              <el-select v-model="form.motor_num" placeholder="请选择">
+                <el-option
+                  v-for="item in motors"
+                  :key="item.id"
+                  :label="item.motor_num"
+                  :value="item.motor_num"
+                />
+              </el-select>
+            </el-form-item>
+
+            <el-form-item
+              label="采样部位"
+              :rules="[{ required: true, message: '请选择采样部位' }]"
+              prop="sample_position"
+            >
+              <el-select v-model="form.sample_position" placeholder="请选择">
+                <el-option
+                  v-for="item in samples"
+                  :key="item.id"
+                  :label="item.position"
+                  :value="item.position"
+                />
+              </el-select>
+            </el-form-item>
+
+            <el-form-item
+              label="采样日期"
+              :rules="[{ required: true, message: '请选择采样日期' }]"
+              prop="sample_time"
+            >
+              <el-date-picker
+                v-model="form.sample_time"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="采样日期"
+              >
+              </el-date-picker>
+            </el-form-item>
+
+            <el-form-item
+              label="总工作时间"
+              prop="sum_work_time"
+              :rules="[{ required: true, message: '请填写总工作时间' }]"
+            >
+              <el-input
+                v-model="form.sum_work_time"
+                placeholder="总工作时间"
+                style="width: 90%"
+              >
+              </el-input>
+            </el-form-item>
+            <el-form-item
+              label="滑油牌号"
+              prop="brand"
+              :rules="[{ required: true, message: '请选择滑油牌号' }]"
+            >
+              <el-select v-model="form.brand" placeholder="滑油牌号">
+                <el-option
+                  v-for="item in greases"
+                  :key="item.id"
+                  :label="item.brand"
+                  :value="item.brand"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="滑油工作时间"
+              prop="grease_work_time"
+              :rules="[{ required: true, message: '请填写滑油工作时间' }]"
+            >
+              <el-input
+                placeholder="滑油工作时间"
+                style="width: 90%"
+                v-model="form.grease_work_time"
+              >
+              </el-input>
+            </el-form-item>
+            <el-form-item
+              label="制谱用油样量"
+              prop="dosage"
+              :rules="[{ required: true, message: '请选择制谱用油样量' }]"
+            >
+              <el-select v-model="form.dosage" placeholder="制谱用油样量">
+                <el-option
+                  v-for="item in oils"
+                  :key="item.id"
+                  :label="item.dosage"
+                  :value="item.dosage"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="稀释比"
+              prop="ratio"
+              :rules="[{ required: true, message: '请选择稀释比' }]"
+            >
+              <el-select v-model="form.ratio" placeholder="稀释比">
+                <el-option
+                  v-for="item in dilutions"
+                  :key="item.id"
+                  :label="item.ratio"
+                  :value="item.ratio"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="倍数"
+              prop="times"
+              :rules="[{ required: true, message: '请填写倍数' }]"
+            >
+              <el-input
+                placeholder="倍数"
+                style="width: 90%"
+                v-model="form.times"
+              >
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </el-card>
+        <el-card style="margin-top: 10px">
+          <div slot="header" class="clearfix">
+            <span>操作区</span>
+          </div>
+          <el-form label-width="50px">
+            <el-form-item style="margin-top: 15px">
+              <el-button
+                type="primary"
+                @click="addImage"
+                style="margin-right: 10px"
+                >添加图片</el-button
+              >
+              <input
+                style="display: none"
+                ref="imgupload"
+                type="file"
+                multiple="multiple"
+                accept="image/*"
+                @change="handleFileChange($event)"
+              />
+              <el-button
+                type="primary"
+                @click="delImage"
+                style="margin-right: 10px"
+                >删除图片</el-button
+              >
+            </el-form-item>
+
+            <el-form-item style="margin-top: 15px">
+              <el-button type="primary" @click="generate">生成编号</el-button>
+            </el-form-item>
+            <el-form-item style="margin-top: 15px; margin-bottom: 49px">
+              <el-button type="primary" @click="save">保存</el-button>
+              <el-button type="danger" @click="handleclose">关闭</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
   <script>
-import { addMotor, getMotor, delMotor, updMotor } from "@/api/motor";
-import { getSample } from "@/api/sample";
+import { getFormData } from "@/api/motor";
 import {
   getReport,
   delReport,
@@ -214,17 +283,8 @@ import { delImages, addImages } from "@/api/images";
 
 export default {
   mounted() {
-    this.loadMotor();
-    this.loadSample();
+    this.loadFormData();
     this.loadReportImg();
-  },
-  props: {
-    row: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
   },
   data() {
     return {
@@ -233,10 +293,14 @@ export default {
       image_num: "",
       motors: [],
       form: {},
+      oils: [],
+      dilutions: [],
+      graeases: [],
       fileList: [],
       samples: [],
       dialogImg: false,
       imgfilesback: [],
+      greases: [],
       index: -1,
       file: {},
     };
@@ -252,7 +316,7 @@ export default {
             }
           });
         } else {
-          is.imgfilesback.splice(this.index, 1);
+          this.imgfilesback.splice(this.index, 1);
           this.fileList.splice(this.index, 1);
         }
         this.fileList.push({
@@ -274,8 +338,8 @@ export default {
       }
     },
     loadReportImg() {
-      if (this.row.status == "edit") {
-        getReportImages({ id: this.row.id }).then((response) => {
+      if (this.$route.query.id) {
+        getReportImages({ id: this.$route.query.id }).then((response) => {
           if (response) {
             if (response.data.images != null) {
               this.fileList = response.data.images.map((value, key) => {
@@ -290,7 +354,7 @@ export default {
               this.fileList.map((item, index) => {
                 this.imgfilesback.push({ file: 1 });
               });
-              var sum = 20 - this.fileList.length;
+              var sum = 16 - this.fileList.length;
               for (let i = 0; i < sum; i++) {
                 this.fileList.push({
                   name: "",
@@ -302,7 +366,7 @@ export default {
                 });
               }
             } else {
-              for (var i = 0; i < 20; i++) {
+              for (var i = 0; i < 16; i++) {
                 this.fileList.push({
                   name: "",
                   status: "ready",
@@ -317,7 +381,7 @@ export default {
           }
         });
       } else {
-        for (var i = 0; i < 20; i++) {
+        for (var i = 0; i < 16; i++) {
           this.fileList.push({
             name: "",
             status: "ready",
@@ -330,7 +394,7 @@ export default {
       }
     },
     handleclose() {
-      this.$emit("backdata");
+      this.$router.push({ path: "/images/index" });
     },
     handleImgClick(k) {
       for (var i = 0; i < this.fileList.length; i++) {
@@ -364,20 +428,13 @@ export default {
           }
         };
       }
-      console.log(this.imgfilesback);
+      this.$refs.imgupload.value = "";
     },
     addImage() {
       this.$refs.imgupload.click();
     },
     generate() {
       this.save();
-    },
-    loadSample() {
-      getSample().then((response) => {
-        if (response) {
-          this.samples = response.data;
-        }
-      });
     },
     save() {
       this.$refs["form"].validate((valid) => {
@@ -414,10 +471,14 @@ export default {
     close() {
       location.reload();
     },
-    loadMotor() {
-      getMotor().then((response) => {
+    loadFormData() {
+      getFormData().then((response) => {
         if (response) {
-          this.motors = response.data;
+          this.motors = response.data.motors;
+          this.samples = response.data.samples;
+          this.greases = response.data.greases;
+          this.oils = response.data.oils;
+          this.dilutions = response.data.dilutions;
         }
       });
     },
@@ -440,14 +501,17 @@ export default {
   }
 
   ::v-deep {
+    .el-upload-list__item {
+      transition: none !important;
+    }
     .zndfx {
       .el-form-item {
         margin-bottom: 18px;
       }
-      .el-date-editor {
-        width: 90%;
+      .el-input__inner {
+        width: 185px;
       }
-      .el-select {
+      .el-date-editor {
         width: 90%;
       }
     }
@@ -462,7 +526,7 @@ export default {
     }
     .el-upload-list--picture-card {
       .el-upload-list__item {
-        margin: 0 20px 8px 0;
+        margin: 0 10px 8px 10px;
       }
       .el-upload-list__item:focus {
         outline: none;
@@ -474,6 +538,7 @@ export default {
     }
     .imglist {
       .el-card__body {
+        text-align: center;
         margin-top: 10px;
       }
       .el-card__header {

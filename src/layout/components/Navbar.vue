@@ -1,27 +1,31 @@
 <template>
   <div class="navbar">
     <el-menu
-      :default-active="$route.path"
       class="el-menu-demo"
       mode="horizontal"
       router
       menu-trigger="click"
+      :default-active="activeMenu"
       @select="handleSelect"
     >
-      <el-menu-item index="/register/engine">发动机信息库</el-menu-item>
+      <el-menu-item index="/motor/index">发动机信息库</el-menu-item>
       <el-menu-item index="/grease/index">滑油信息库</el-menu-item>
       <el-menu-item index="/sample/index">采样部位信息库</el-menu-item>
-      <el-menu-item index="/analyse/index">铁谱磨粒分析库</el-menu-item>
-      <el-menu-item index="/images/index">铁谱磨粒照片库</el-menu-item>
-      <el-submenu index="7">
+      <el-menu-item index="/oil/index">制谱用油样量</el-menu-item>
+      <el-menu-item index="/dilution/index">稀释比设置</el-menu-item>
+      <el-menu-item index="/analyse/index">铁谱磨粒故障库</el-menu-item>
+      <el-menu-item index="/images/index">铁谱磨粒图片库</el-menu-item>
+      <el-menu-item index="/statement/index">分析报告查询</el-menu-item>
+      <el-submenu index="/system">
         <template slot="title">系统设置</template>
-        <el-menu-item>账号管理</el-menu-item>
-        <el-menu-item>数据库备份</el-menu-item>
+        <el-menu-item index="/system/user">账号管理</el-menu-item>
+        <el-menu-item index="/system/pwd">修改密码</el-menu-item>
+        <el-menu-item index="/system/dump">数据库备份</el-menu-item>
+        <el-menu-item index="">数据库导入</el-menu-item>
       </el-submenu>
       <el-submenu index="8">
         <template slot="title">帮助</template>
         <el-menu-item>软件介绍</el-menu-item>
-        <el-menu-item>使用方法</el-menu-item>
       </el-submenu>
       <div class="right-menu" style="height: 60px; line-height: 60px">
         <el-dropdown class="avatar-container" trigger="click">
@@ -64,6 +68,20 @@ export default {
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "name"]),
+    activeMenu() {
+      const route = this.$route;
+      const { meta, path } = route;
+      if (path == "/analyse/detail") {
+        return "/analyse/index";
+      }
+      if (path == "/images/detail" || path == "images/add") {
+        return "/images/index";
+      }
+      if (meta.activeMenu) {
+        return meta.activeMenu;
+      }
+      return path;
+    },
   },
   data() {
     return {

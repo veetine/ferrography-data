@@ -2,46 +2,34 @@
   <div class="container">
     <el-row>
       <el-col :span="24">
-        <el-card style="margin: 10px" class="mycard">
-          <div slot="header" class="clearfix">
-            <span>发动机列表</span>
-            <el-button
-              style="float: right; padding: 3px 0"
-              type="text"
-              @click="add"
-              >新增</el-button
-            >
-          </div>
-
-          <el-table
-            :data="motors"
-            style="width: 100%"
-            header-cell-class-name="head"
-            tooltip-effect="dark"
-            @selection-change="handleSelectionChange"
-          >
-            <el-table-column type="selection" width="65" />
-            <el-table-column prop="id" label="编号" width="120">
-            </el-table-column>
-            <el-table-column prop="plane_type" label="飞机型号">
-            </el-table-column>
-            <el-table-column prop="plane_num" label="飞机编号">
-            </el-table-column>
-            <el-table-column prop="motor_num" label="发动机编号">
-            </el-table-column>
-            <el-table-column label="操作">
-              <template slot-scope="scope">
-                <el-button type="text"  @click="edit(scope.row)">
-                  编辑
-                </el-button>
-                <el-button type="text"  @click="del(scope.row)">
-                  移除
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card></el-col
-      >
+        <el-table
+          :data="motors"
+          style="width: 100%;"
+          header-cell-class-name="head"
+          tooltip-effect="dark"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="80" />
+          <el-table-column prop="id" label="编号">
+          </el-table-column>
+          <el-table-column prop="plane_type" label="飞机型号">
+          </el-table-column>
+          <el-table-column prop="plane_num" label="飞机编号"> </el-table-column>
+          <el-table-column prop="plane_num" label="发动机型号">
+          </el-table-column>
+          <el-table-column prop="motor_num" label="发动机编号">
+          </el-table-column>
+          <el-table-column>
+            <template slot="header">
+              <el-button type="primary" @click="add">添加</el-button>
+            </template>
+            <template slot-scope="scope">
+              <el-button type="text" @click="edit(scope.row)"> 编辑 </el-button>
+              <el-button type="text" @click="del(scope.row)"> 删除 </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
     </el-row>
 
     <el-dialog
@@ -51,12 +39,15 @@
       @close="close"
       width="35%"
     >
-      <el-form ref="form" :model="form" label-width="100px" >
+      <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="飞机型号">
           <el-input v-model="form.plane_type"></el-input>
         </el-form-item>
         <el-form-item label="飞机编号">
-          <el-input v-model="form.plane_num"></el-input> </el-form-item
+          <el-input v-model="form.plane_num"></el-input>
+        </el-form-item>
+        <el-form-item label="发动机型号">
+          <el-input v-model="form.motor_type"></el-input> </el-form-item
         ><el-form-item label="发动机编号">
           <el-input v-model="form.motor_num"></el-input>
         </el-form-item>
@@ -173,7 +164,7 @@ export default {
       padding: 0px;
     }
     .el-dialog {
-      height: 370px;
+      height: 450px;
       border-radius: 8px;
       .el-dialog__body {
         padding: 25px 45px 30px 25px;

@@ -62,57 +62,65 @@ export const constantRoutes = [{
     }]
   },
   {
-    path: '/register',
+    path: '/motor',
     component: Layout,
-    redirect: '/register/engine',
-    name: 'Register',
-    meta: {
-      title: '数据注册',
-      icon: 'el-icon-s-help'
-    },
+    redirect: '/motor/index',
     children: [{
-      path: 'engine',
-      name: 'Engine',
-      component: () => import('@/views/register/engine'),
+      path: 'index',
+      component: () => import('@/views/motor/index'),
       meta: {
         title: '发动机注册',
-        icon: 'table'
       }
     }]
   },
   {
     path: '/grease',
     component: Layout,
-    hidden: true,
     redirect: '/grease/index',
     children: [{
       path: 'index',
-      name: '滑油信息库',
       component: () => import('@/views/grease/index'),
       meta: {
         title: '滑油信息库',
-        icon: 'grease'
       }
     }]
   },
   {
     path: '/sample',
     component: Layout,
-    hidden: true,
     redirect: '/sample/index',
     children: [{
       path: 'index',
-      name: '采样部位信息库',
       component: () => import('@/views/sample/index'),
       meta: {
         title: '采样部位信息库',
-        icon: 'sample'
+      }
+    }]
+  }, {
+    path: '/oil',
+    component: Layout,
+    redirect: '/oil/index',
+    children: [{
+      path: 'index',
+      component: () => import('@/views/oil/index'),
+      meta: {
+        title: '制谱用油样量',
+      }
+    }]
+  }, {
+    path: '/dilution',
+    component: Layout,
+    redirect: '/dilution/index',
+    children: [{
+      path: 'index',
+      component: () => import('@/views/dilution/index'),
+      meta: {
+        title: '稀释比设置',
       }
     }]
   }, {
     path: '/analyse',
     component: Layout,
-    hidden: true,
     redirect: '/analyse/index',
     children: [{
       path: 'index',
@@ -120,107 +128,71 @@ export const constantRoutes = [{
       component: () => import('@/views/analyse/index'),
       meta: {
         title: '铁谱磨粒分析库',
-        icon: 'analyse'
+      }
+    }, {
+      path: 'detail',
+      component: () => import('@/views/analyse/detail'),
+      meta: {
+        title: '详情 - 铁谱磨粒分析库',
       }
     }]
   }, {
-    path: '/images/index',
+    path: '/images',
     component: Layout,
-    hidden: true,
-    redirect: '/index',
+    redirect: '/images/index',
     children: [{
-      path: '',
-      name: '铁谱磨粒照片库',
+      path: 'index',
       component: () => import('@/views/images/index'),
       meta: {
-        title: '铁谱磨粒照片库',
-        icon: 'index'
+        title: '铁谱磨粒图片库',
+      }
+    }, {
+      path: 'add',
+      component: () => import('@/views/images/add'),
+      meta: {
+        title: '添加图片 - 铁谱磨粒图片库',
+      }
+    }, {
+      path: 'detail',
+      component: () => import('@/views/images/detail'),
+      meta: {
+        title: '查看图片 - 铁谱磨粒图片库',
       }
     }]
-  },
+  }, {
+    path: '/system',
+    component: Layout,
+    children: [{
+      path: 'user',
+      component: () => import('@/views/system/user'),
+      meta: {
+        title: '账号管理 - 系统设置',
+      }
+    }, {
+      path: 'pwd',
+      component: () => import('@/views/system/pwd'),
+      meta: {
+        title: '修改密码 - 系统设置',
+      }
+    }, {
+      path: 'dump',
+      component: () => import('@/views/system/dump'),
+      meta: {
+        title: '数据库备份 - 系统设置',
+      }
+    }]
+  }
 ]
 
 /**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [
-  // {
-  //   path: '/nested',
-  //   component: Layout,
-  //   redirect: '/nested/menu1',
-  //   name: 'Nested',
-  //   meta: {
-  //     title: 'Nested',
-  //     icon: 'nested'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'menu1',
-  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
-  //       name: 'Menu1',
-  //       meta: { title: 'Menu1' },
-  //       children: [
-  //         {
-  //           path: 'menu1-1',
-  //           component: () => import('@/views/nested/menu1/menu1-1'),
-  //           name: 'Menu1-1',
-  //           meta: { title: 'Menu1-1' }
-  //         },
-  //         {
-  //           path: 'menu1-2',
-  //           component: () => import('@/views/nested/menu1/menu1-2'),
-  //           name: 'Menu1-2',
-  //           meta: { title: 'Menu1-2' },
-  //           children: [
-  //             {
-  //               path: 'menu1-2-1',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-  //               name: 'Menu1-2-1',
-  //               meta: { title: 'Menu1-2-1' }
-  //             },
-  //             {
-  //               path: 'menu1-2-2',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-  //               name: 'Menu1-2-2',
-  //               meta: { title: 'Menu1-2-2' }
-  //             }
-  //           ]
-  //         },
-  //         {
-  //           path: 'menu1-3',
-  //           component: () => import('@/views/nested/menu1/menu1-3'),
-  //           name: 'Menu1-3',
-  //           meta: { title: 'Menu1-3' }
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'menu2',
-  //       component: () => import('@/views/nested/menu2/index'),
-  //       meta: { title: 'menu2' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
-
-  // 404 page must be placed at the end !!!
-  {
-    path: '*',
-    redirect: '/404',
-    hidden: true
-  }
-]
+export const asyncRoutes = [{
+  path: '*',
+  redirect: '/404',
+  hidden: true
+}]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

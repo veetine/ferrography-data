@@ -65,41 +65,29 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item style="margin-right: 15px" label="采样日期">
-            <el-date-picker
-              v-model="formInline.sample_time"
-              type="date"
-              value-format="yyyy-MM-dd"
-              placeholder="选择日期"
+          <el-form-item class="item4">
+            <el-select
+              v-model="formInline.brand"
+              clearable
               @change="loadReport"
-            >
-            </el-date-picker>
-          </el-form-item>
-
-          <el-form-item style="margin-right: 15px" label="分析日期">
-            <el-date-picker
-              v-model="formInline.analyse_time"
-              value-format="yyyy-MM-dd"
-              type="date"
-              placeholder="选择日期"
-              @change="loadReport"
-            >
-            </el-date-picker>
-          </el-form-item>
-
-          <el-form-item class="item4" style="margin-right: 25px">
-            <el-input
-              v-model="formInline.ferr_num"
-              placeholder="铁谱片号"
-              @change="loadReport"
+              placeholder="滑油牌号"
             >
               <span slot="prefix" style="color: #333; margin-left: 5px">
-                铁谱片号:</span
+                滑油牌号:</span
               >
-            </el-input>
+              <el-option
+                v-for="item in greases"
+                :key="item.id"
+                :label="item.brand"
+                :value="item.brand"
+              />
+            </el-select>
           </el-form-item>
 
-          <el-form-item class="item1" style="margin-right: 15px">
+          <el-form-item
+            class="item1"
+            style="margin-left: 10px; margin-right: 15px"
+          >
             <el-button type="primary" @click="find">查询</el-button>
           </el-form-item>
           <el-form-item class="item1">
@@ -143,24 +131,15 @@
               {{ scope.row.sample_time }}
             </template>
           </el-table-column>
-          <el-table-column label="分析日期">
-            <template slot-scope="scope">
-              {{ scope.row.analyse_time }}
-            </template>
-          </el-table-column>
-          <el-table-column label="铁谱片号">
-            <template slot-scope="scope">
-              {{ scope.row.ferr_num }}
-            </template>
-          </el-table-column>
+
           <el-table-column label="滑油牌号">
             <template slot-scope="scope">
               {{ scope.row.brand }}
             </template>
           </el-table-column>
-          <el-table-column label="发动机工作时间">
+          <el-table-column label="总工作时间">
             <template slot-scope="scope">
-              {{ scope.row.motor_work_time }}
+              {{ scope.row.sum_work_time }}
             </template>
           </el-table-column>
           <el-table-column label="滑油工作时间">
@@ -168,61 +147,33 @@
               {{ scope.row.grease_work_time }}
             </template>
           </el-table-column>
-          <el-table-column label="制谱用油量">
+          <el-table-column label="制谱用油样量">
             <template slot-scope="scope">
-              {{ scope.row.gasoline }}
+              {{ scope.row.dosage }}
             </template>
           </el-table-column>
           <el-table-column label="稀释比">
             <template slot-scope="scope">
-              {{ scope.row.dilution }}
+              {{ scope.row.ratio }}
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="135">
             <template slot-scope="scope">
-              <el-button type="text"  @click="detail(scope.row)">
+              <el-button type="text" @click="detail(scope.row)">
                 查看
               </el-button>
-              <el-button type="text"  @click="edit(scope.row)">
-                编辑
-              </el-button>
-              <el-button type="text"  @click="del(scope.row)">
-                移除
-              </el-button>
+              <el-button type="text" @click="edit(scope.row)"> 编辑 </el-button>
+              <el-button type="text" @click="del(scope.row)"> 移除 </el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-col>
     </el-row>
-
-    <AddImages
-      @backdata="backdata"
-      v-if="addImagesShow"
-      :row="currow"
-      class="add_images"
-    />
-
-    <Detail
-      @backdata="detailBackData"
-      @toanalyse="toAnalyse"
-      v-if="detailShow"
-      :row="currow"
-      class="detail_images"
-    />
-
-    <Analyse
-      @backdata="analyseBackData"
-      @toanalyse="toAnalyse"
-      v-if="analyseShow"
-      :row="currow"
-      class="add_images"
-    />
   </div>
 </template>
 
 <script>
-import { getMotor } from "@/api/motor";
-import { getSample } from "@/api/sample";
+import { getFormData } from "@/api/motor";
 import {
   getReport,
   delReport,
@@ -231,19 +182,10 @@ import {
   addReport,
 } from "@/api/report";
 import { delImages } from "@/api/images";
-import AddImages from "./add";
-import Detail from "./detail";
-import Analyse from "./analyse";
 
 export default {
-  components: {
-    AddImages,
-    Detail,
-    Analyse,
-  },
   mounted() {
-    this.loadMotor();
-    this.loadSample();
+    this.loadFormData();
     this.loadReport();
   },
   data() {
@@ -259,14 +201,26 @@ export default {
       reports: [],
       motors: [],
       samples: [],
+      greases: [],
       fileList: [],
+      oils: [],
       status: "",
     };
   },
   methods: {
+    loadFormData() {
+      getFormData().then((response) => {
+        if (response) {
+          this.motors = response.data.motors;
+          this.samples = response.data.samples;
+          this.greases = response.data.greases;
+          this.oils = response.data.oils;
+          this.dilutions = response.data.dilutions;
+        }
+      });
+    },
     detail(row) {
-      this.detailShow = true;
-      this.currow = row;
+      this.$router.push({ path: "/images/detail", query: { id: row.id } });
     },
     detailBackData() {
       this.detailShow = false;
@@ -278,11 +232,11 @@ export default {
       this.currow = {};
       this.loadReport();
     },
-    toAnalyse(form, e,f) {
+    toAnalyse(form, e, f) {
       this.detailShow = false;
       this.analyseShow = true;
       this.$set(this.currow, "image_path", e);
-       this.$set(this.currow, "image_num", f);
+      this.$set(this.currow, "image_num", f);
       this.$set(this.currow, "form", form);
     },
     backdata(e) {
@@ -291,9 +245,7 @@ export default {
       this.loadReport();
     },
     edit(row) {
-      row.status = "edit";
-      this.currow = row;
-      this.addImagesShow = true;
+      this.$router.push({ path: "/images/add", query: { id: row.id } });
     },
     find() {
       this.loadReport();
@@ -369,8 +321,7 @@ export default {
       });
     },
     add() {
-      this.currow.status = "add";
-      this.addImagesShow = true;
+      this.$router.push({ path: "/images/add" });
     },
   },
 };
@@ -379,9 +330,6 @@ export default {
 <style lang="scss" scoped>
 .diag-container {
   ::v-deep {
-    .el-upload-list__item {
-      transition: none !important;
-    }
     .caozuoqu {
       .el-card__body {
         padding: 20px;
@@ -450,10 +398,12 @@ export default {
 
     .item4 .el-input__inner {
       padding-left: 75px;
+      width: 235px;
     }
 
     .item5 .el-input__inner {
       padding-left: 95px;
+      width: 235px;
     }
     .item5 .el-input__inner {
       padding-left: 90px;

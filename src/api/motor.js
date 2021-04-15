@@ -30,3 +30,11 @@ export function updMotor(params) {
     params
   })
 }
+
+
+export function getFormData() {
+  return request({
+    url: '/form/data',
+    method: 'get',
+  })
+}

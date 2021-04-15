@@ -3,16 +3,19 @@
     <el-row>
       <el-col :span="24">
         <el-table
-          :data="samples"
+          :data="dilutions"
           style="width: 100%"
           header-cell-class-name="head"
           tooltip-effect="dark"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="80" />
-          <el-table-column prop="id" label="编号">
+          <el-table-column prop="id" label="编号"> </el-table-column>
+          <el-table-column label="稀释比">
+            <template slot-scope="scope">
+              {{ scope.row.ratio }}
+            </template>
           </el-table-column>
-          <el-table-column prop="position" label="采样部位"> </el-table-column>
           <el-table-column>
             <template slot="header">
               <el-button type="primary" @click="add">添加</el-button>
@@ -33,9 +36,19 @@
       @close="close"
       width="35%"
     >
-      <el-form ref="form" :model="form" label-width="100px">
-        <el-form-item label="采样部位">
-          <el-input v-model="form.position"></el-input>
+      <el-form ref="form" :model="form" label-width="120px">
+        <el-form-item label="稀释比">
+          <el-input
+            v-model="form.r_1"
+            style="width: 100px"
+            type="number"
+          ></el-input>
+          比
+          <el-input
+            v-model="form.r_2"
+            style="width: 100px"
+            type="number"
+          ></el-input>
         </el-form-item>
         <el-form-item style="margin-top: 30px">
           <el-button type="primary" @click="onSubmit">提 交</el-button>
@@ -47,10 +60,15 @@
 </template>
 
 <script>
-import { addSample, getSample, delSample, updSample } from "@/api/sample";
+import {
+  addDilution,
+  getDilution,
+  delDilution,
+  updDilution,
+} from "@/api/dilution";
 export default {
   mounted() {
-    this.loadSample();
+    this.loadDilution();
   },
   methods: {
     del(row) {
@@ -60,13 +78,13 @@ export default {
         type: "warning",
       })
         .then(() => {
-          delSample({ id: row.id }).then((response) => {
+          delDilution({ id: row.id }).then((response) => {
             if (response.code == 0) {
               this.$message({
                 type: "success",
                 message: "删除成功!",
               });
-              this.loadSample();
+              this.loadDilution();
             }
           });
         })
@@ -75,16 +93,16 @@ export default {
     close() {
       this.form = {};
     },
-    loadSample() {
-      getSample().then((response) => {
+    loadDilution() {
+      getDilution().then((response) => {
         if (response) {
-          this.samples = response.data;
+          this.dilutions = response.data;
         }
       });
     },
     onSubmit() {
-      if (this.status == "添加采样信息") {
-        addSample(this.form).then((response) => {
+      if (this.status == "添加") {
+        addDilution(this.form).then((response) => {
           if (response.code == 0) {
             this.$message({
               type: "success",
@@ -92,11 +110,11 @@ export default {
             });
             this.dialogVisible = false;
             this.form = {};
-            this.loadSample();
+            this.loadDilution();
           }
         });
       } else {
-        updSample(this.form).then((response) => {
+        updDilution(this.form).then((response) => {
           if (response.code == 0) {
             this.$message({
               type: "success",
@@ -104,7 +122,7 @@ export default {
             });
             this.dialogVisible = false;
             this.form = {};
-            this.loadSample();
+            this.loadDilution();
           }
         });
       }
@@ -114,19 +132,19 @@ export default {
     },
     add() {
       this.dialogVisible = true;
-      this.status = "添加采样信息";
+      this.status = "添加";
     },
     edit(row) {
       this.form = JSON.parse(JSON.stringify(row));
       this.dialogVisible = true;
-      this.status = "编辑采样信息";
+      this.status = "编辑";
     },
   },
   data() {
     return {
       status: "",
       dialogVisible: false,
-      samples: [],
+      dilutions: [],
       form: {},
     };
   },
@@ -182,6 +200,10 @@ export default {
 
     .el-table__header-wrapper .el-checkbox span {
       display: none;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
     }
   }
 }

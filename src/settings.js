@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '航空发动机磨粒图谱数据库',
+  title: '航空发动机铁谱图谱故障库',
 
   /**
    * @type {boolean} true | false
