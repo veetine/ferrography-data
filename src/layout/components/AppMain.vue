@@ -20,7 +20,6 @@ export default {
 <style scoped>
 .app-main {
   /*50 = navbar  */
-  margin-top: 135px;
   width: 100%;
   position: relative;
   overflow: hidden;
