@@ -105,6 +105,7 @@ export default {
     edit(row, permission) {
       this.form = JSON.parse(JSON.stringify(row));
       this.form.permission = permission;
+      this.form.token = this.form.access_token;
       updUser(this.form).then((response) => {
         if (response) {
           this.$message({

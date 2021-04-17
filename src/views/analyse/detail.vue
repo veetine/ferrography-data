@@ -11,7 +11,7 @@
           label-width="100px"
         >
           <el-form-item label="铁谱照片编号">
-            <el-input style="width: 490px" disabled v-model="selectImageNum" />
+            <el-input style="width: 490px" disabled v-model="image.image_num" />
           </el-form-item>
 
           <el-form-item label="飞机型号">
@@ -154,30 +154,37 @@
           </el-form-item>
         </el-form>
         <div class="block" style="text-align: center; margin-bottom: 15px">
+          <div style="margin: 5px 0">
+            <span style="padding: 0 60px">倍数：{{ form.times }}</span>
+            <span style="padding: 0 60px">光源：W/G</span>
+          </div>
           <el-image
             style="width: 600px; height: 400px; margin-bottom: 10px"
             fit="scale-down"
-            :src="imageUrl"
+            :src="image.image_path"
           >
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
           </el-image>
-          <div data-v-3780a3d6="" style="padding-left: 20px">
+
+          <div data-v-3780a3d6="" style="padding-left: 30px">
             <ul class="el-upload-list el-upload-list--picture-card">
               <li
-                v-for="item in fileList"
-                :key="item.name"
-                :label="item.url"
-                :value="item.url"
                 tabindex="0"
-                class="el-upload-list__item is-success"
+                class="el-upload-list__item"
+                :class="[
+                  item.status == 'success' ? 'is-success' : '',
+                  item.selected ? 'select' : '',
+                ]"
+                v-for="(item, i) in images"
+                :key="i"
+                @click="handleImgClick(i)"
               >
                 <el-image
+                  style="width: 148px; height: 148px; margin-bottom: 10px"
                   fit="cover"
-                  style="width: 148px; height: 148px"
-                  @click="selectImg(item.url, item.image_num)"
-                  :src="item.url"
+                  :src="item.image_path"
                 />
               </li>
             </ul>
@@ -185,7 +192,9 @@
         </div>
       </el-col>
       <el-col :span="7">
-        <p style="margin: 5px 0">磨粒链分析</p>
+        <p style="margin: 0; margin-bottom: 5px; font-weight: 500">
+          磨粒链分析
+        </p>
         <div
           data-v-0c55db87=""
           class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table--small"
@@ -234,7 +243,7 @@
               cellspacing="0"
               cellpadding="0"
               border="0"
-              class="el-table__body"
+              class="el-table__body mytable"
               style="width: 386px"
             >
               <colgroup>
@@ -248,7 +257,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.level"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -263,11 +275,11 @@
             style="display: none"
           ></div>
         </div>
-        <p style="margin: 5px 0">特征磨粒分析</p>
+        <p style="margin: 5px 0; font-weight: 500">特征磨粒分析</p>
 
         <div
           data-v-0c55db87=""
-          class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table--small"
+          class="el-table el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table--small mytable"
           style="width: 100%"
         >
           <div class="hidden-columns">
@@ -327,7 +339,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.fatigue_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -337,7 +352,12 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <span data-v-0c55db87=""
+                        ><el-input
+                          v-model="image.layered_amt"
+                          placeholder="请输入内容"
+                        ></el-input>
+                      </span>
                     </div>
                   </td>
                 </tr>
@@ -347,7 +367,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.sphere_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -357,7 +380,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.adhere_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -367,7 +393,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.cutt_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -377,7 +406,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.slide_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -387,7 +419,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.golden_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -397,7 +432,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.red_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -407,7 +445,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.etch_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -418,7 +459,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.color_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -429,7 +473,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.oil_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -439,7 +486,10 @@
                   </td>
                   <td rowspan="1" colspan="1" class="el-table_2_column_4">
                     <div class="cell">
-                      <span data-v-0c55db87="">123</span>
+                      <el-input
+                        v-model="image.other_amt"
+                        placeholder="请输入内容"
+                      ></el-input>
                     </div>
                   </td>
                 </tr>
@@ -455,8 +505,12 @@
             style="display: none"
           ></div>
         </div>
-        <div style="margin-top: 10px">
-          <el-button type="danger" @click="close">关闭</el-button>
+        <div style="margin-top: 15px">
+          <el-form label-width="" inline>
+            <el-form-item>
+              <el-button type="danger" @click="close">关闭</el-button>
+            </el-form-item>
+          </el-form>
         </div>
       </el-col>
     </el-row>
@@ -470,12 +524,7 @@ import { getReport, getReportImages } from "@/api/report";
 export default {
   data() {
     return {
-      picker: "",
-      form: { picker: "" },
-      tableData: [{ moli: "正常磨粒", number: "123" }],
-      fileList: [],
-      imageUrl: "",
-      selectImageNum: "",
+      form: {},
       image: {},
       dilutions: [],
       oils: [],
@@ -483,6 +532,7 @@ export default {
       reports: [],
       motors: [],
       samples: [],
+      images: [],
     };
   },
   mounted() {
@@ -501,61 +551,31 @@ export default {
         }
       });
     },
-    confirmAdd(row) {
-      row.edit = false;
-      row.id = this.image.id;
-      updImages(row).then((response) => {});
-    },
-    save() {
-      updImages(this.image).then((response) => {});
-    },
-    tabHandleClick(tab, event) {},
-    detail(row) {},
-    editData(row) {
-      row.edit = true;
-    },
     close() {
       this.$router.push({ path: "/analyse/index" });
     },
-    loadMotor() {
-      getMotor().then((response) => {
-        if (response) {
-          this.motors = response.data;
+    handleImgClick(k) {
+      for (var i = 0; i < this.images.length; i++) {
+        if (k == i) {
+          this.images[i].selected = true;
+          this.image = this.images[i];
+        } else {
+          this.images[i].selected = false;
         }
-      });
-    },
-    loadSample() {
-      getSample().then((response) => {
-        if (response) {
-          this.samples = response.data;
-        }
-      });
-    },
-    add() {
-      this.status = "add";
-      this.dialogVisible = true;
-    },
-    selectImg(url, image_num) {
-      this.imageUrl = url;
-      this.selectImageNum = image_num;
+      }
     },
     loadReportImg() {
-      console.log(this.$route.query.id);
-      getReportImages({ id: this.$route.query.id }).then((response) => {
+      var id;
+      if (this.$route.query.id) {
+        id = this.$route.query.id;
+      }
+      getReportImages({ id: id }).then((response) => {
         if (response) {
           if (response.data.images != null) {
-            this.fileList = response.data.images.map((value, key) => {
-              return {
-                id: value.id,
-                url: value.image_path,
-                image_num: value.image_num,
-              };
-            });
+            this.images = response.data.images;
           }
-          if (this.fileList.length != 0) {
-            this.imageUrl = this.fileList[0].url;
-            this.selectImageNum = this.fileList[0].image_num;
-          }
+          this.image = this.images[0];
+          this.images[0].selected = true;
           this.form = response.data;
         }
       });
@@ -567,10 +587,37 @@ export default {
 <style lang="scss" scoped>
 .analyse-container {
   ::v-deep {
+    .el-table td {
+      padding: 0;
+    }
+    .mytable {
+      .el-input__inner {
+        border: 0;
+      }
+    }
+    .el-upload-list--picture-card {
+      .el-upload-list__item {
+        margin: 0 10px 8px 10px;
+      }
+      .el-upload-list__item:focus {
+        outline: none;
+      }
+    }
+    .el-upload-list__item {
+      transition: none !important;
+    }
+
     input::-webkit-inner-spin-button {
       -webkit-appearance: none !important;
       margin: 0;
     }
+
+    .el-upload-list {
+      li.select {
+        border: 4px solid#FFC07B;
+      }
+    }
+
     .el-table td {
       position: unset;
     }

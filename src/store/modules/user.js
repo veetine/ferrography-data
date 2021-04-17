@@ -85,7 +85,7 @@ const actions = {
         } = response
 
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('请重新登录')
         }
         data.roles = data.permissions ? data.permissions : []
         data.roles.push('admin')
