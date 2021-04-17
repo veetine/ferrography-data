@@ -88,6 +88,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.ruleForm.token = this.$store.getters.token;
           userPwd(this.ruleForm).then((response) => {
             if (response) {
               this.$message({

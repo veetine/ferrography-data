@@ -1,6 +1,16 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import {
+  login,
+  logout,
+  getInfo
+} from '@/api/user'
+import {
+  getToken,
+  setToken,
+  removeToken
+} from '@/utils/auth'
+import {
+  resetRouter
+} from '@/router'
 
 const getDefaultState = () => {
   return {
@@ -33,59 +43,78 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
+  login({
+    commit
+  }, userInfo) {
+    const {
+      username,
+      password
+    } = userInfo
     return new Promise((resolve, reject) => {
-      commit('SET_TOKEN', '7676')
-      setToken('7676')
-      resolve()
-      // login({ username: username.trim(), password: password }).then(response => {
-      //   const { data } = response
-      //   commit('SET_TOKEN', data.access_token)
-
-      //   setToken(data.access_token)
-      //   resolve()
-      // }).catch(error => {
-      //   reject(error)
-      // })
+      login({
+        email: username.trim(),
+        password: password
+      }).then(response => {
+        const {
+          data
+        } = response
+        commit('SET_TOKEN', data.access_token)
+        commit('SET_NAME', data.account)
+        commit('SET_AVATAR', data.dept)
+        setToken(data.access_token)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 
   // get user info
-  getInfo({ commit, state }) {
+  getInfo({
+    commit,
+    state
+  }) {
     return new Promise((resolve, reject) => {
-        commit('SET_ROLES', ['admin'])
-        commit('SET_NAME', 'ff')
-        commit('SET_AVATAR', 'ss')
-        resolve()
-      // getInfo().then(response => {
-      //   console.log(response)
-      //   const { data } = response
+      // commit('SET_ROLES', ['admin'])
+      // commit('SET_NAME', 'ff')
+      // commit('SET_AVATAR', 'ss')
+      // resolve()
+      getInfo(state.token).then(response => {
+        const {
+          data
+        } = response
 
-      //   if (!data) {
-      //     reject('Verification failed, please Login again.')
-      //   }
-      //   data.roles = data.permissions ? data.permissions : []
-      //   data.roles.push('admin')
-      //   const { roles, username, avatar } = data
+        if (!data) {
+          reject('Verification failed, please Login again.')
+        }
+        data.roles = data.permissions ? data.permissions : []
+        data.roles.push('admin')
+        const {
+          roles,
+          username,
+          avatar
+        } = data
 
-      //   // roles must be a non-empty array
-      //   // if (!roles || roles.length <= 0) {
-      //   //   reject('getInfo: roles must be a non-null array!')
-      //   // }
-
-      //   commit('SET_ROLES', roles)
-      //   commit('SET_NAME', username)
-      //   commit('SET_AVATAR', avatar)
-      //   resolve(data)
-      // }).catch(error => {
-      //   reject(error)
-      // })
+        // roles must be a non-empty array
+        // if (!roles || roles.length <= 0) {
+        //   reject('getInfo: roles must be a non-null array!')
+        // }
+        commit('SET_ROLES', roles)
+        commit('SET_TOKEN', data.access_token)
+        commit('SET_NAME', data.account)
+        commit('SET_AVATAR', data.dept)
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 
   // user logout
-  logout({ commit, state }) {
+  logout({
+    commit,
+    state
+  }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         removeToken() // must remove  token  first
@@ -99,7 +128,9 @@ const actions = {
   },
 
   // remove token
-  resetToken({ commit }) {
+  resetToken({
+    commit
+  }) {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
@@ -114,4 +145,3 @@ export default {
   mutations,
   actions
 }
-

@@ -172,7 +172,6 @@
                 :value="item.url"
                 tabindex="0"
                 class="el-upload-list__item is-success"
-                style="float: left"
               >
                 <el-image
                   fit="cover"
@@ -180,11 +179,6 @@
                   @click="selectImg(item.url, item.image_num)"
                   :src="item.url"
                 />
-                <a class="el-upload-list__item-name"
-                  ><i class="el-icon-document"></i>15 </a
-                ><label class="el-upload-list__item-status-label"
-                  ><i class="el-icon-upload-success el-icon-check"></i></label
-                ><i class="el-icon-close"></i>
               </li>
             </ul>
           </div>

@@ -1,29 +1,5 @@
 import request from '@/utils/request'
 import qs from 'qs'
-export function login(data) {
-  return request({
-    url: 'login',
-    method: 'post',
-    data: qs.stringify(data)
-  })
-}
-
-export function getInfo(token) {
-  return request({
-    url: 'profile',
-    method: 'get',
-    params: {
-      token
-    }
-  })
-}
-
-export function logout() {
-  return request({
-    url: 'logout',
-    method: 'post'
-  })
-}
 
 
 export function addUser(params) {
@@ -49,7 +25,6 @@ export function delUser(params) {
   })
 }
 
-
 export function updUser(params) {
   return request({
     url: '/user/upd',
@@ -58,20 +33,43 @@ export function updUser(params) {
   })
 }
 
-
-export function userPwd(params) {
-  return request({
-    url: '/user/pwd',
-    method: 'get',
-    params
-  })
-}
-
-
 export function dump(params) {
   return request({
     url: '/dump',
     method: 'get',
     params
+  })
+}
+
+export function login(data) {
+  return request({
+    url: 'login/admin',
+    method: 'post',
+    data: qs.stringify(data)
+  })
+}
+
+export function getInfo(token) {
+  return request({
+    url: 'user/info',
+    method: 'get',
+    params: {
+      token
+    }
+  })
+}
+
+export function logout() {
+  return request({
+    url: 'logout',
+    method: 'post'
+  })
+}
+
+export function userPwd(data) {
+  return request({
+    url: 'user/pwd',
+    method: 'post',
+    data: qs.stringify(data)
   })
 }

@@ -26,14 +26,14 @@ function loginSuccess() {
 }
 
 function logout() {
-  mainWin.setBounds({
+  /* mainWin.setBounds({
     width: 1200,
     height: 700
   })
   mainWin.setResizable(false)
   mainWin.setMaximizable(false)
 
-  mainWin.center()
+  mainWin.center() */
 }
 
 function initMenu() {

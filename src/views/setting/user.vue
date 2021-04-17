@@ -18,12 +18,16 @@
             <template slot-scope="scope">
               <el-button
                 type="text"
-                v-if="scope.row.permission == 2"
-                @click="edit(scope.row, 3)"
+                v-if="scope.row.permission == 1"
+                @click="edit(scope.row, 2)"
               >
                 停用
               </el-button>
-              <el-button type="text" v-else @click="edit(scope.row, 2)">
+              <el-button
+                type="text"
+                v-if="scope.row.permission == 2"
+                @click="edit(scope.row, 1)"
+              >
                 恢复权限</el-button
               >
               <el-button

@@ -160,25 +160,36 @@ export const constantRoutes = [{
       }
     }]
   }, {
-    path: '/system',
+    path: '/setting',
     component: Layout,
     children: [{
       path: 'user',
-      component: () => import('@/views/system/user'),
+      component: () => import('@/views/setting/user'),
       meta: {
         title: '账号管理 - 系统设置',
       }
     }, {
       path: 'pwd',
-      component: () => import('@/views/system/pwd'),
+      component: () => import('@/views/setting/pwd'),
       meta: {
         title: '修改密码 - 系统设置',
       }
     }, {
       path: 'dump',
-      component: () => import('@/views/system/dump'),
+      component: () => import('@/views/setting/dump'),
       meta: {
         title: '数据库备份 - 系统设置',
+      }
+    }]
+  },{
+    path: '/statement',
+    component: Layout,
+    redirect: '/statement/index',
+    children: [{
+      path: 'index',
+      component: () => import('@/views/statement/index'),
+      meta: {
+        title: '铁谱分析报告',
       }
     }]
   }

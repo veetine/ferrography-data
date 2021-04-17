@@ -15,12 +15,12 @@
       <el-menu-item index="/dilution/index">稀释比设置</el-menu-item>
       <el-menu-item index="/analyse/index">铁谱磨粒故障库</el-menu-item>
       <el-menu-item index="/images/index">铁谱磨粒图片库</el-menu-item>
-      <el-menu-item index="/statement/index">分析报告查询</el-menu-item>
-      <el-submenu index="/system">
+      <el-menu-item index="/statement/index">铁谱分析报告</el-menu-item>
+      <el-submenu index="/setting">
         <template slot="title">系统设置</template>
-        <el-menu-item index="/system/user">账号管理</el-menu-item>
-        <el-menu-item index="/system/pwd">修改密码</el-menu-item>
-        <el-menu-item index="/system/dump">数据库备份</el-menu-item>
+        <el-menu-item index="/setting/user">账号管理</el-menu-item>
+        <el-menu-item index="/setting/pwd">修改密码</el-menu-item>
+        <el-menu-item index="/setting/dump">数据库备份</el-menu-item>
         <el-menu-item index="">数据库导入</el-menu-item>
       </el-submenu>
       <el-submenu index="8">
@@ -34,7 +34,7 @@
             <span style="margin-left: 10px">管理员</span>
           </div>
           <el-dropdown-menu slot="dropdown" class="user-dropdown">
-            <el-dropdown-item>
+            <el-dropdown-item @click.native="logout">
               <span style="display: block">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>
