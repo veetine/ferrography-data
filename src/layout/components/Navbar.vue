@@ -43,8 +43,12 @@
         <li @click="oil"><img src="@/assets/img/oil.png" /></li>
         <li @click="data_regist"><img src="@/assets/img/data_regist.png" /></li>
         <li @click="abrasive"><img src="@/assets/img/abrasive.png" /></li>
-        <li><img src="@/assets/img/user_setting.png" /></li>
-        <li><img src="@/assets/img/system_setting.png" /></li>
+        <li @click="usersetting">
+          <img src="@/assets/img/user_setting.png" />
+        </li>
+        <li @click="pwdsetting">
+          <img src="@/assets/img/system_setting.png" />
+        </li>
         <li><img src="@/assets/img/help.png" /></li>
       </ul>
     </div>
@@ -98,13 +102,19 @@ export default {
   },
   methods: {
     engine() {
-      this.$router.push({ path: "/register/engine" });
+      this.$router.push({ path: "/motor/index" });
     },
     abrasive() {
       this.$router.push({ path: "/analyse/index" });
     },
+    usersetting() {
+      this.$router.push({ path: "/setting/user" });
+    },
     oil() {
       this.$router.push({ path: "/grease/index" });
+    },
+    pwdsetting() {
+      this.$router.push({ path: "/setting/pwd" });
     },
     data_regist() {
       this.$router.push({ path: "/sample/index" });

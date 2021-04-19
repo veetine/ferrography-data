@@ -154,6 +154,10 @@
           </el-form-item>
         </el-form>
         <div class="block" style="text-align: center; margin-bottom: 15px">
+          <div style="margin: 5px 0">
+            <span style="padding: 0 60px">倍数：{{ form.times }}</span>
+            <span style="padding: 0 60px">光源：W/G</span>
+          </div>
           <el-image
             style="width: 600px; height: 500px"
             fit="scale-down"
