@@ -106,7 +106,7 @@
             <span>{{ stat.report.grease_work_time }}</span>
           </el-form-item>
           <el-form-item label="制谱用油样量:">
-            <span>{{ stat.report.dosage }}</span>
+            <span>{{ stat.report.dosage }} ml</span>
           </el-form-item>
           <el-form-item label="滑油牌号:">
             <span>{{ stat.report.brand }}</span>
