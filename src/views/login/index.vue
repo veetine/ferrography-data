@@ -56,11 +56,11 @@
         @click.native.prevent="handleLogin"
         >登录</el-button
       >
-      <div style="text-align: right; margin-bottom: 15px">
+      <!-- <div style="text-align: right; margin-bottom: 15px">
         <el-checkbox v-model="checked" style="color: #333"
           >记住密码</el-checkbox
         >
-      </div>
+      </div> -->
     </el-form>
   </div>
 </template>
@@ -133,10 +133,10 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
-              localStore.set_email(this.loginForm.username);
-              if (this.checked) {
-                localStore.set_password(this.loginForm.password);
-              }
+              // localStore.set_email(this.loginForm.username);
+              // if (this.checked) {
+              //   localStore.set_password(this.loginForm.password);
+              // }
 
               this.$router.push({ path: this.redirect || "/index" });
               ipcRenderer.send("login_success");
