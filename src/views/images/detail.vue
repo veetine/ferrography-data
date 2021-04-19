@@ -193,7 +193,6 @@
         </div>
         <el-form :inline="true">
           <el-form-item style="margin-top: 15px">
-            <el-button type="primary" @click="analyse">查看</el-button>
             <el-button type="danger" @click="handleclose">关闭</el-button>
           </el-form-item>
         </el-form>
