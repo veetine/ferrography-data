@@ -158,15 +158,17 @@
             <span style="padding: 0 60px">倍数：{{ form.times }}</span>
             <span style="padding: 0 60px">光源：W/G</span>
           </div>
-          <el-image
+          <div
+            data-v-0c55db87=""
+            class="el-image"
             style="width: 600px; height: 400px; margin-bottom: 10px"
-            fit="scale-down"
-            :src="image.image_path"
           >
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image>
+            <img
+              :src="image.image_path"
+              class="el-image__inner"
+              style="object-fit: scale-down"
+            /><!---->
+          </div>
 
           <div data-v-3780a3d6="" style="padding-left: 30px">
             <ul class="el-upload-list el-upload-list--picture-card">
@@ -181,11 +183,17 @@
                 :key="i"
                 @click="handleImgClick(i)"
               >
-                <el-image
+                <div
+                  data-v-0c55db87=""
+                  class="el-image"
                   style="width: 148px; height: 148px; margin-bottom: 10px"
-                  fit="cover"
-                  :src="item.image_path"
-                />
+                >
+                  <img
+                    :src="item.image_path"
+                    class="el-image__inner"
+                    style="object-fit: cover"
+                  /><!---->
+                </div>
               </li>
             </ul>
           </div>

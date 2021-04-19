@@ -3,7 +3,8 @@
 import {
   app,
   protocol,
-  BrowserWindow
+  BrowserWindow,
+  ipcMain
 } from 'electron'
 import {
   createProtocol
@@ -31,10 +32,16 @@ protocol.registerSchemesAsPrivileged([{
     standard: true
   }
 }])
+let win
+let quit = true
 
+ipcMain.on('close', () => {
+  quit = false;
+  win.close();
+})
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1380,
     height: 950,
     minHeight: 450,
@@ -59,6 +66,15 @@ async function createWindow() {
   win.on('closed', () => {
     app.quit()
   })
+
+  win.on('close', (e) => {
+    if (quit) {
+      e.preventDefault();
+      win.webContents.send('ping', 'whoooooooh!')
+    }
+  });
+
+
   initIpcMain(win)
   initMenu()
   if (process.env.WEBPACK_DEV_SERVER_URL) {

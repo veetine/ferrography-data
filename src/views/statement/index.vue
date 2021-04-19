@@ -83,7 +83,6 @@
           class="myfrom"
           label-width="110px"
         >
-          
           <el-form-item label="部门:">
             <span>{{ stat.dept }}</span>
           </el-form-item>
@@ -170,6 +169,7 @@
         <div>
           <h3 class="mosun">
             <span style="margin: 0 0 0 10px">磨损状态判读:</span>
+            <div v-if="stat.report.times==100" style="display:inline-block">
             <span style="margin-left: 30px">极低</span>
             <label v-if="stat.image.level == 1 || stat.image.level == 0"
               >★</label
@@ -178,6 +178,19 @@
             <label v-if="stat.image.level == 2">★</label>
             <span>注意</span> <label v-if="stat.image.level == 3">★</label>
             <span>极高</span> <label v-if="stat.image.level == 4">★</label>
+            </div>
+
+            <div v-else style="display:inline-block">
+               <span style="margin-left: 30px">极低</span>
+                <label v-if="stat.image.sum == 1 || stat.image.sum == 0"
+              >★</label
+            >
+            <span>正常</span>
+            <label v-if="stat.image.sum == 2">★</label>
+            <span>注意</span> <label v-if="stat.image.sum == 3">★</label>
+            <span>极高</span> <label v-if="stat.image.sum == 4">★</label>
+            </div>
+            
           </h3>
         </div>
         <hr style="border: 1px solid black; margin: 0" />
@@ -201,16 +214,16 @@
             <li>个</li>
             <li
               v-if="
-                stat.image.lv == 1 ||
-                stat.image.lv == 0 ||
-                stat.image.lv == undefined
+                stat.image.sum == 1 ||
+                stat.image.sum == 0 ||
+                stat.image.sum == undefined
               "
             >
               极低
             </li>
-            <li v-if="stat.image.lv == 2">正常</li>
-            <li v-if="stat.image.lv == 3">注意</li>
-            <li v-if="stat.image.lv == 4">极高</li>
+            <li v-if="stat.image.sum == 2">正常</li>
+            <li v-if="stat.image.sum == 3">注意</li>
+            <li v-if="stat.image.sum == 4">极高</li>
             <div style="clear: both"></div>
           </ul>
         </div>
@@ -219,10 +232,10 @@
           铁谱图片
         </h3>
         <hr style="border: 1px solid black; margin: 0" />
-        <ul class="el-upload-list el-upload-list--picture-card">
+        <ul class="el-upload-list el-upload-list--picture-card imgul">
           <li
             tabindex="0"
-            style="margin: 10px; float: left"
+            style="margin: 10px 15px; float: left"
             class="el-upload-list__item"
             :class="[
               item.status == 'success' ? 'is-success' : '',
@@ -230,7 +243,6 @@
             ]"
             v-for="(item, i) in stat.images"
             :key="i"
-            @click="handleImgClick(i)"
           >
             <el-image
               style="width: 250px; height: 250px"
@@ -238,10 +250,22 @@
               :src="item.image_path"
             />
             <div>
-              <span style="margin-right: 10px">倍数：500</span>
+              <span style="margin-right: 10px"
+                >倍数：{{ stat.report.times }}</span
+              >
               <span>光源：W/G</span>
             </div>
           </li>
+          <div
+            style="
+              width: 300px;
+              height: 250px;
+              float: left;
+              display: flex;
+              margin: 10px;
+            "
+          >
+          </div>
           <div style="clear: both"></div>
         </ul>
       </div>
@@ -256,8 +280,9 @@
 </template>
 
 <script>
-import { findStatements } from "@/api/statement";
+import { findStatements, addStatement } from "@/api/statement";
 import { getSample } from "@/api/sample";
+import { updImages } from "@/api/images";
 
 export default {
   mounted() {
@@ -274,6 +299,41 @@ export default {
     };
   },
   methods: {
+    handleSuccessImg(value) {
+      this.stat.images.push(value.data);
+      addStatement({
+        report_id: this.stat.report.id,
+        data: JSON.stringify(this.stat),
+      }).then((response) => {
+        if (response) {
+          this.$message({
+            type: "success",
+            message: "添加成功!",
+          });
+        }
+      });
+    },
+    del(image) {
+      this.stat.images = this.stat.images.filter(
+        (item) => item.id !== image.id
+      );
+      image.tag = 0;
+      updImages(image).then((response) => {
+        if (response) {
+          addStatement({
+            report_id: this.stat.report.id,
+            data: JSON.stringify(this.stat),
+          }).then((response) => {
+            if (response) {
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+            }
+          });
+        }
+      });
+    },
     save() {
       this.$message({
         type: "success",
@@ -315,8 +375,28 @@ export default {
 <style lang="scss" scoped>
 .diag-container {
   ::v-deep {
+    .upload-demo {
+      float: left;
+      width: 250px;
+      height: 250px;
+      margin-top: 10px;
+      margin: 0 auto;
+      .el-upload-dragger {
+        width: 250px;
+        height: 250px;
+      }
+      .el-icon-upload {
+        margin-top: 75px;
+      }
+    }
+    .el-upload-list--picture-card {
+      .el-upload-list__item:focus {
+        outline: none;
+      }
+    }
+
     .el-upload-list__item {
-      width: 320px;
+      width: 300px;
       height: 280px;
       border: 0;
     }

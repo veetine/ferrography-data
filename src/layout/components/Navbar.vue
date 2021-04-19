@@ -28,17 +28,13 @@
         <el-menu-item>软件介绍</el-menu-item>
       </el-submenu>
       <div class="right-menu" style="height: 60px; line-height: 60px">
-        <el-dropdown class="avatar-container" trigger="click">
+        <div class="avatar-container">
           <div class="avatar-wrapper">
             <img src="@/assets/img/headimg.jpeg" class="user-avatar" />
-            <span style="margin-left: 10px">管理员</span>
+            <span style="margin: 0 10px 0 5px">{{ name }}</span>
+            <span style="font-size: 15px" @click="logout">退出</span>
           </div>
-          <el-dropdown-menu slot="dropdown" class="user-dropdown">
-            <el-dropdown-item @click.native="logout">
-              <span style="display: block">退出登录</span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        </div>
       </div>
     </el-menu>
     <div class="ul-line">
@@ -74,7 +70,7 @@ export default {
       if (path == "/analyse/detail") {
         return "/analyse/index";
       }
-      if (path == "/images/detail" || path == "images/add") {
+      if (path == "/images/detail" || path == "/images/add") {
         return "/images/index";
       }
       if (meta.activeMenu) {
@@ -87,6 +83,18 @@ export default {
     return {
       activeIndex: "1",
     };
+  },
+  created() {
+    ipcRenderer.on("ping", (event, message) => {
+      this.$store
+        .dispatch("user/logout")
+        .then((res) => {
+          ipcRenderer.send("close");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   },
   methods: {
     engine() {
@@ -203,7 +211,7 @@ export default {
     }
 
     .avatar-container {
-      margin-right: 30px;
+      margin-right: 15px;
 
       .avatar-wrapper {
         height: 60px;

@@ -509,7 +509,7 @@ export default {
         margin-bottom: 18px;
       }
       .el-input__inner {
-        width: 185px;
+        width: 180px;
       }
       .el-date-editor {
         width: 90%;
