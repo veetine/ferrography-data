@@ -217,6 +217,7 @@ export default {
       this.loadReport();
     },
     loadReport() {
+      this.formInline.guzhang=1
       getReport(this.formInline).then((response) => {
         if (response) {
           this.reports = response.data;
