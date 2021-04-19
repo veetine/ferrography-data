@@ -37,21 +37,6 @@
         </div>
       </div>
     </el-menu>
-    <div class="ul-line">
-      <ul>
-        <li @click="engine"><img src="@/assets/img/engine.png" /></li>
-        <li @click="oil"><img src="@/assets/img/oil.png" /></li>
-        <li @click="data_regist"><img src="@/assets/img/data_regist.png" /></li>
-        <li @click="abrasive"><img src="@/assets/img/abrasive.png" /></li>
-        <li @click="usersetting">
-          <img src="@/assets/img/user_setting.png" />
-        </li>
-        <li @click="pwdsetting">
-          <img src="@/assets/img/system_setting.png" />
-        </li>
-        <li><img src="@/assets/img/help.png" /></li>
-      </ul>
-    </div>
     <!-- <breadcrumb class="breadcrumb-container" /> -->
   </div>
 </template>
@@ -140,7 +125,7 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  height: 135px;
+  height: 70px;
   z-index: 1500;
   background: #ffff;
   .ul-line {

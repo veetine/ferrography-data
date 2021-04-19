@@ -2,7 +2,7 @@
   <div :class="classObj" class="app-wrapper">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}" style="height:135px">
+      <div :class="{'fixed-header':fixedHeader}" style="height:70px">
         <navbar/>
       </div>
       <app-main />
