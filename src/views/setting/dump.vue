@@ -1,7 +1,5 @@
 <template>
-  <div class="container">
-      
-  </div>
+  <div class="container"></div>
 </template>
 
 <script>
@@ -13,6 +11,8 @@ export default {
         this.$message({
           type: "success",
           message: "数据备份成功!",
+          duration: 1500,
+          offset: 75,
         });
       }
     });

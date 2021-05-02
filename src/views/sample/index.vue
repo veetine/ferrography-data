@@ -10,8 +10,7 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="80" />
-          <el-table-column prop="id" label="编号">
-          </el-table-column>
+          <el-table-column prop="id" label="编号"> </el-table-column>
           <el-table-column prop="position" label="采样部位"> </el-table-column>
           <el-table-column>
             <template slot="header">
@@ -65,6 +64,8 @@ export default {
               this.$message({
                 type: "success",
                 message: "删除成功!",
+                duration: 1500,
+                offset: 75,
               });
               this.loadSample();
             }
@@ -89,6 +90,8 @@ export default {
             this.$message({
               type: "success",
               message: "添加成功!",
+              duration: 1500,
+              offset: 75,
             });
             this.dialogVisible = false;
             this.form = {};
@@ -101,6 +104,8 @@ export default {
             this.$message({
               type: "success",
               message: "更新成功!",
+              duration: 1500,
+              offset: 75,
             });
             this.dialogVisible = false;
             this.form = {};

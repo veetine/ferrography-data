@@ -83,6 +83,8 @@ export default {
               this.$message({
                 type: "success",
                 message: "删除成功!",
+                duration: 1500,
+                offset: 75,
               });
               this.loadDilution();
             }
@@ -107,6 +109,8 @@ export default {
             this.$message({
               type: "success",
               message: "添加成功!",
+              duration: 1500,
+              offset: 75,
             });
             this.dialogVisible = false;
             this.form = {};
@@ -119,6 +123,8 @@ export default {
             this.$message({
               type: "success",
               message: "更新成功!",
+              duration: 1500,
+              offset: 75,
             });
             this.dialogVisible = false;
             this.form = {};

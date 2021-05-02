@@ -134,7 +134,7 @@
             </li>
             <li style="background: #d1d1d1">等级</li>
             <li style="border-right: 1px #000 solid">正常磨粒</li>
-            <li>{{ stat.image.level }}</li>
+            <li>{{ stat.level }}</li>
             <li style="background: #d1d1d1; border-right: 1px #000 solid">
               磨粒类型
             </li>
@@ -169,28 +169,18 @@
         <div>
           <h3 class="mosun">
             <span style="margin: 0 0 0 10px">磨损状态判读:</span>
-            <div v-if="stat.report.times==100" style="display:inline-block">
-            <span style="margin-left: 30px">极低</span>
-            <label v-if="stat.image.level == 1 || stat.image.level == 0"
-              >★</label
-            >
-            <span>正常</span>
-            <label v-if="stat.image.level == 2">★</label>
-            <span>注意</span> <label v-if="stat.image.level == 3">★</label>
-            <span>极高</span> <label v-if="stat.image.level == 4">★</label>
+            <div style="display: inline-block">
+              <span style="margin-left: 30px">极低</span>
+              <label
+                v-if="stat.status == 1 || stat.status == 0"
+                style="font-size: 20px"
+                >★</label
+              >
+              <span>正常</span>
+              <label v-if="stat.status == 2">★</label>
+              <span>注意</span> <label v-if="stat.status == 3">★</label>
+              <span>超标</span> <label v-if="stat.status == 4">★</label>
             </div>
-
-            <div v-else style="display:inline-block">
-               <span style="margin-left: 30px">极低</span>
-                <label v-if="stat.image.sum == 1 || stat.image.sum == 0"
-              >★</label
-            >
-            <span>正常</span>
-            <label v-if="stat.image.sum == 2">★</label>
-            <span>注意</span> <label v-if="stat.image.sum == 3">★</label>
-            <span>极高</span> <label v-if="stat.image.sum == 4">★</label>
-            </div>
-            
           </h3>
         </div>
         <hr style="border: 1px solid black; margin: 0" />
@@ -200,30 +190,29 @@
           </h3>
           <ul class="pingjia">
             <li>磨粒链</li>
-            <li>{{ stat.image.level }}</li>
+            <li>{{ stat.level }}</li>
             <li>级</li>
-            <li v-if="stat.image.level == 1 || stat.image.level == 0">极低</li>
-            <li v-if="stat.image.level == 2">正常</li>
-            <li v-if="stat.image.level == 3">注意</li>
-            <li v-if="stat.image.level == 4">极高</li>
+            <!-- <li v-if="stat.level == 1 || stat.level == 0">极低</li>
+            <li v-if="stat.level == 2">正常</li>
+            <li v-if="stat.level == 3">注意</li>
+            <li v-if="stat.level >= 4">极高</li> -->
             <div style="clear: both"></div>
           </ul>
           <ul class="pingjia">
             <li>特征磨粒</li>
-            <li>{{ stat.image.sum }}</li>
-            <li>个</li>
+            <li>{{ stat.sum }}</li>
             <li
               v-if="
-                stat.image.sum == 1 ||
-                stat.image.sum == 0 ||
-                stat.image.sum == undefined
+                stat.tz_status == 1 ||
+                stat.tz_status == 0 ||
+                stat.tz_status == undefined
               "
             >
-              极低
+              无
             </li>
-            <li v-if="stat.image.sum == 2">正常</li>
-            <li v-if="stat.image.sum == 3">注意</li>
-            <li v-if="stat.image.sum == 4">极高</li>
+            <li v-if="stat.tz_status == 2">少量</li>
+            <li v-if="stat.tz_status == 3">中量</li>
+            <li v-if="stat.tz_status == 4">大量</li>
             <div style="clear: both"></div>
           </ul>
         </div>
@@ -237,10 +226,7 @@
             tabindex="0"
             style="margin: 10px 15px; float: left"
             class="el-upload-list__item"
-            :class="[
-              item.status == 'success' ? 'is-success' : '',
-              item.selected ? 'select' : '',
-            ]"
+            :class="[item.status == 'success' ? 'is-success' : '']"
             v-for="(item, i) in stat.images"
             :key="i"
           >
@@ -250,22 +236,17 @@
               :src="item.image_path"
             />
             <div>
-              <span style="margin-right: 10px"
-                >倍数：{{ stat.report.times }}</span
+              <span style="margin-right: 10px">倍数：{{ item.lv }}</span>
+              <span style="margin-left: 15px">光源：W/G</span>
+              <el-button
+                type="text"
+                v-if="item.id != stat.tz_id && item.id != stat.moli_id"
+                style="padding: 0; margin-left: 20px"
+                @click="del(item)"
+                >删除</el-button
               >
-              <span>光源：W/G</span>
             </div>
           </li>
-          <div
-            style="
-              width: 300px;
-              height: 250px;
-              float: left;
-              display: flex;
-              margin: 10px;
-            "
-          >
-          </div>
           <div style="clear: both"></div>
         </ul>
       </div>
@@ -281,8 +262,7 @@
 
 <script>
 import { findStatements, addStatement } from "@/api/statement";
-import { getSample } from "@/api/sample";
-import { updImages } from "@/api/images";
+import { getReportImages } from "@/api/report";
 
 export default {
   mounted() {
@@ -299,8 +279,10 @@ export default {
     };
   },
   methods: {
-    handleSuccessImg(value) {
-      this.stat.images.push(value.data);
+    del(image) {
+      this.stat.images = this.stat.images.filter(
+        (item) => item.id !== image.id
+      );
       addStatement({
         report_id: this.stat.report.id,
         data: JSON.stringify(this.stat),
@@ -308,29 +290,34 @@ export default {
         if (response) {
           this.$message({
             type: "success",
-            message: "添加成功!",
+            message: "删除成功!",
+            duration: 1500,
+            offset: 75,
           });
         }
       });
     },
-    del(image) {
-      this.stat.images = this.stat.images.filter(
-        (item) => item.id !== image.id
-      );
-      image.tag = 0;
-      updImages(image).then((response) => {
+    addImages() {
+      getReportImages({ id: this.stat.report.id }).then((response) => {
         if (response) {
-          addStatement({
-            report_id: this.stat.report.id,
-            data: JSON.stringify(this.stat),
-          }).then((response) => {
-            if (response) {
-              this.$message({
-                type: "success",
-                message: "删除成功!",
-              });
+          if (response.data.images != null) {
+            var array = response.data.images;
+            for (let i = 0; i < array.length; i++) {
+              var ok = false;
+              for (let s = 0; s < this.stat.report.images.length; s++) {
+                if (this.stat.report.images[s].id == array[i].id) {
+                  ok = true;
+                }
+              }
+              if (!ok) {
+                this.stat.images.push(array[i]);
+              }
             }
-          });
+            addStatement({
+              report_id: this.stat.report.id,
+              data: JSON.stringify(this.stat),
+            });
+          }
         }
       });
     },
@@ -338,6 +325,8 @@ export default {
       this.$message({
         type: "success",
         message: "保存成功!",
+        duration: 1500,
+        offset: 75,
       });
     },
     loadStatements() {
@@ -441,6 +430,7 @@ export default {
       margin: 0;
       padding: 0;
       li {
+        min-height: 37px;
         padding: 10px 0;
         width: 50%;
         border-bottom: 1px #000 solid;

@@ -4,18 +4,17 @@
       <el-col :span="24">
         <el-table
           :data="motors"
-          style="width: 100%;"
+          style="width: 100%"
           header-cell-class-name="head"
           tooltip-effect="dark"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="80" />
-          <el-table-column prop="id" label="编号">
-          </el-table-column>
+          <el-table-column prop="id" label="编号"> </el-table-column>
           <el-table-column prop="plane_type" label="飞机型号">
           </el-table-column>
           <el-table-column prop="plane_num" label="飞机编号"> </el-table-column>
-          <el-table-column prop="plane_num" label="发动机型号">
+          <el-table-column prop="motor_type" label="发动机型号">
           </el-table-column>
           <el-table-column prop="motor_num" label="发动机编号">
           </el-table-column>
@@ -81,6 +80,8 @@ export default {
               this.$message({
                 type: "success",
                 message: "删除成功!",
+                duration: 1500,
+                offset: 75,
               });
               this.loadMotor();
             }
@@ -105,6 +106,8 @@ export default {
             this.$message({
               type: "success",
               message: "添加成功!",
+              duration: 1500,
+              offset: 75,
             });
             this.dialogVisible = false;
             this.form = {};
@@ -117,6 +120,8 @@ export default {
             this.$message({
               type: "success",
               message: "更新成功!",
+              duration: 1500,
+              offset: 75,
             });
             this.dialogVisible = false;
             this.form = {};

@@ -11,7 +11,7 @@
           label-width="100px"
         >
           <el-form-item label="铁谱照片编号">
-            <el-input style="width: 490px" disabled v-model="selectImageNum" />
+            <el-input style="width: 490px" disabled v-model="image.image_num" />
           </el-form-item>
 
           <el-form-item label="飞机型号">
@@ -154,19 +154,21 @@
           </el-form-item>
         </el-form>
         <div class="block" style="text-align: center; margin-bottom: 15px">
-          <div style="margin: 5px 0">
-            <span style="padding: 0 60px">倍数：{{ form.times }}</span>
-            <span style="padding: 0 60px">光源：W/G</span>
-          </div>
-          <el-image
+          <div
+            data-v-1719f349=""
+            class="el-image"
             style="width: 600px; height: 500px"
-            fit="scale-down"
-            :src="imageUrl"
           >
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
+            <div style="margin: 5px 0">
+              <span style="padding: 0 60px">倍数：{{ image.lv }}</span>
+              <span style="padding: 0 60px">光源：W/G</span>
             </div>
-          </el-image>
+            <img
+              :src="image.image_path"
+              class="el-image__inner"
+              style="object-fit: scale-down"
+            /><!---->
+          </div>
         </div>
       </el-col>
       <el-col :span="7">
@@ -174,7 +176,7 @@
           @row-click="handdleRow"
           ref="multipleTable"
           highlight-current-row
-          :data="fileList"
+          :data="images"
           tooltip-effect="dark"
           style="width: 100%; min-height: 400px"
           header-cell-class-name="head"
@@ -191,10 +193,11 @@
         <div slot="header" class="clearfix">
           <span>操作区</span>
         </div>
-        <el-form :inline="true">
-          <el-form-item style="margin-top: 15px">
+        <el-form>
+          <el-form-item style="margin-top: 5px">
             <el-button type="danger" @click="handleclose">关闭</el-button>
           </el-form-item>
+          
         </el-form>
       </el-col>
     </el-row>
@@ -203,8 +206,9 @@
 
 <script>
 import { getReportImages } from "@/api/report";
-import { delImages } from "@/api/images";
+import { updImages } from "@/api/images";
 import { getFormData } from "@/api/motor";
+import router from "@/router";
 
 export default {
   mounted() {
@@ -217,10 +221,7 @@ export default {
       reports: [],
       motors: [],
       samples: [],
-      fileList: [],
-      imageUrl: "",
-      selectImageNum: "",
-      id: "",
+      images: [],
       image: {},
       dilutions: [],
       oils: [],
@@ -228,6 +229,23 @@ export default {
     };
   },
   methods: {
+    analyse() {
+      this.$router.push({
+        path: "/analyse/index",
+        query: { id: this.$route.query.id },
+      });
+    },
+    set(tag) {
+      this.image.tag = tag;
+      updImages(this.image).then((response) => {
+        this.$message({
+          type: "success",
+          message: "设置成功!",
+          duration: 1500,
+          offset: 75,
+        });
+      });
+    },
     loadFormData() {
       getFormData().then((response) => {
         if (response) {
@@ -239,25 +257,18 @@ export default {
         }
       });
     },
-    del() {
-      delImages({ id: this.id }).then((response) => {
-        if (response) {
-          this.loadReportImg();
-        }
-      });
+    add() {
+      this.$router.push({ path: "/images/edit", query: { id: this.form.id } });
     },
     analyse() {
-      console.log(this.$route.query.id);
       this.$router.push({
-        path: "/analyse/detail",
+        path: "/analyse/index",
         query: { id: this.$route.query.id },
       });
     },
     handdleRow(row, event, column) {
       this.$refs.multipleTable.setCurrentRow(row);
-      this.id = row.id;
-      this.imageUrl = row.url;
-      this.selectImageNum = row.image_num;
+      this.image = row;
     },
     handleclose() {
       this.$router.push({ path: "/images/index" });
@@ -267,19 +278,9 @@ export default {
       getReportImages({ id: this.$route.query.id }).then((response) => {
         if (response) {
           if (response.data.images != null) {
-            this.fileList = response.data.images.map((value, key) => {
-              return {
-                id: value.id,
-                url: value.image_path,
-                image_num: value.image_num,
-              };
-            });
-          }
-          if (this.fileList.length != 0) {
-            this.imageUrl = this.fileList[0].url;
-            this.selectImageNum = this.fileList[0].image_num;
-            this.$refs.multipleTable.setCurrentRow(this.fileList[0]);
-            this.id = this.fileList[0].id;
+            this.images = response.data.images;
+            this.image = this.images[0];
+            this.$refs.multipleTable.setCurrentRow(this.image);
           }
           this.form = response.data;
         }
