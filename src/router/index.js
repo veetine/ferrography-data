@@ -31,168 +31,174 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [{
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
+  path: '/login',
+  component: () => import('@/views/login/index'),
+  hidden: true
+},
 
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
-  {
-    path: '/update',
-    component: () => import('@/views/update'),
-    hidden: true
-  },
+{
+  path: '/404',
+  component: () => import('@/views/404'),
+  hidden: true
+},
+{
+  path: '/update',
+  component: () => import('@/views/update'),
+  hidden: true
+},
 
-  {
-    path: '/',
-    component: Layout,
-    hidden: true,
-    redirect: '/update',
-    children: [{
-      path: '',
-      component: () => import('@/views/index'),
-      meta: {
-        title: '首页',
-        icon: 'index'
-      }
-    }]
-  },
-  {
-    path: '/motor',
-    component: Layout,
-    redirect: '/motor/index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/motor/index'),
-      meta: {
-        title: '发动机注册',
-      }
-    }]
-  },
-  {
-    path: '/grease',
-    component: Layout,
-    redirect: '/grease/index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/grease/index'),
-      meta: {
-        title: '滑油信息库',
-      }
-    }]
-  },
-  {
-    path: '/sample',
-    component: Layout,
-    redirect: '/sample/index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/sample/index'),
-      meta: {
-        title: '采样部位信息库',
-      }
-    }]
+{
+  path: '/',
+  component: Layout,
+  hidden: true,
+  redirect: '/update',
+  children: [{
+    path: '',
+    component: () => import('@/views/index'),
+    meta: {
+      title: '首页',
+      icon: 'index'
+    }
+  }]
+},
+{
+  path: '/motor',
+  component: Layout,
+  redirect: '/motor/index',
+  children: [{
+    path: 'index',
+    component: () => import('@/views/motor/index'),
+    meta: {
+      title: '发动机注册',
+    }
+  }]
+},
+{
+  path: '/grease',
+  component: Layout,
+  redirect: '/grease/index',
+  children: [{
+    path: 'index',
+    component: () => import('@/views/grease/index'),
+    meta: {
+      title: '滑油信息库',
+    }
+  }]
+},
+{
+  path: '/sample',
+  component: Layout,
+  redirect: '/sample/index',
+  children: [{
+    path: 'index',
+    component: () => import('@/views/sample/index'),
+    meta: {
+      title: '采样部位信息库',
+    }
+  }]
+}, {
+  path: '/oil',
+  component: Layout,
+  redirect: '/oil/index',
+  children: [{
+    path: 'index',
+    component: () => import('@/views/oil/index'),
+    meta: {
+      title: '制谱用油样量',
+    }
+  }]
+}, {
+  path: '/dilution',
+  component: Layout,
+  redirect: '/dilution/index',
+  children: [{
+    path: 'index',
+    component: () => import('@/views/dilution/index'),
+    meta: {
+      title: '稀释比设置',
+    }
+  }]
+}, {
+  path: '/analyse',
+  component: Layout,
+  redirect: '/analyse/index',
+  children: [{
+    path: 'index',
+    name: '铁谱磨粒分析库',
+    component: () => import('@/views/analyse/index'),
+    meta: {
+      title: '铁谱磨粒分析库',
+    }
   }, {
-    path: '/oil',
-    component: Layout,
-    redirect: '/oil/index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/oil/index'),
-      meta: {
-        title: '制谱用油样量',
-      }
-    }]
+    path: 'detail',
+    component: () => import('@/views/analyse/detail'),
+    meta: {
+      title: '详情 - 铁谱磨粒分析库',
+    }
+  }]
+}, {
+  path: '/images',
+  component: Layout,
+  redirect: '/images/index',
+  children: [{
+    path: 'index',
+    component: () => import('@/views/images/index'),
+    meta: {
+      title: '铁谱磨粒图片库',
+    }
   }, {
-    path: '/dilution',
-    component: Layout,
-    redirect: '/dilution/index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/dilution/index'),
-      meta: {
-        title: '稀释比设置',
-      }
-    }]
+    path: 'add',
+    component: () => import('@/views/images/add'),
+    meta: {
+      title: '添加图片 - 铁谱磨粒图片库',
+    }
   }, {
-    path: '/analyse',
-    component: Layout,
-    redirect: '/analyse/index',
-    children: [{
-      path: 'index',
-      name: '铁谱磨粒分析库',
-      component: () => import('@/views/analyse/index'),
-      meta: {
-        title: '铁谱磨粒分析库',
-      }
-    }, {
-      path: 'detail',
-      component: () => import('@/views/analyse/detail'),
-      meta: {
-        title: '详情 - 铁谱磨粒分析库',
-      }
-    }]
+    path: 'detail',
+    component: () => import('@/views/images/detail'),
+    meta: {
+      title: '查看图片 - 铁谱磨粒图片库',
+    }
+  }]
+}, {
+  path: '/setting',
+  component: Layout,
+  children: [{
+    path: 'user',
+    component: () => import('@/views/setting/user'),
+    meta: {
+      title: '账号管理 - 系统设置',
+    }
   }, {
-    path: '/images',
-    component: Layout,
-    redirect: '/images/index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/images/index'),
-      meta: {
-        title: '铁谱磨粒图片库',
-      }
-    }, {
-      path: 'add',
-      component: () => import('@/views/images/add'),
-      meta: {
-        title: '添加图片 - 铁谱磨粒图片库',
-      }
-    }, {
-      path: 'detail',
-      component: () => import('@/views/images/detail'),
-      meta: {
-        title: '查看图片 - 铁谱磨粒图片库',
-      }
-    }]
+    path: 'pwd',
+    component: () => import('@/views/setting/pwd'),
+    meta: {
+      title: '修改密码 - 系统设置',
+    }
   }, {
-    path: '/setting',
-    component: Layout,
-    children: [{
-      path: 'user',
-      component: () => import('@/views/setting/user'),
-      meta: {
-        title: '账号管理 - 系统设置',
-      }
-    }, {
-      path: 'pwd',
-      component: () => import('@/views/setting/pwd'),
-      meta: {
-        title: '修改密码 - 系统设置',
-      }
-    }, {
-      path: 'dump',
-      component: () => import('@/views/setting/dump'),
-      meta: {
-        title: '数据库备份 - 系统设置',
-      }
-    }]
-  },{
-    path: '/statement',
-    component: Layout,
-    redirect: '/statement/index',
-    children: [{
-      path: 'index',
-      component: () => import('@/views/statement/index'),
-      meta: {
-        title: '铁谱分析报告',
-      }
-    }]
-  }
+    path: 'dump',
+    component: () => import('@/views/setting/dump'),
+    meta: {
+      title: '数据库备份 - 系统设置',
+    }
+  }]
+}, {
+  path: '/statement',
+  component: Layout,
+  redirect: '/statement/index',
+  children: [{
+    path: 'index',
+    component: () => import('@/views/statement/index'),
+    meta: {
+      title: '铁谱分析报告',
+    }
+  }, {
+    path: 'tables',
+    component: () => import('@/views/statement/tables'),
+    meta: {
+      title: '报告详情',
+    }
+  }]
+}
 ]
 
 /**

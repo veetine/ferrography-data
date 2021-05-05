@@ -62,6 +62,9 @@ export default {
       if (path == "/images/detail" || path == "/images/add") {
         return "/images/index";
       }
+       if (path == "/statement/tables") {
+        return "/statement/index";
+      }
       if (meta.activeMenu) {
         return meta.activeMenu;
       }

@@ -172,14 +172,14 @@
             <div style="display: inline-block">
               <span style="margin-left: 30px">极低</span>
               <label
-                v-if="stat.status == 1 || stat.status == 0"
+                v-if="stat.status == 0"
                 style="font-size: 20px"
                 >★</label
               >
               <span>正常</span>
-              <label v-if="stat.status == 2">★</label>
-              <span>注意</span> <label v-if="stat.status == 3">★</label>
-              <span>超标</span> <label v-if="stat.status == 4">★</label>
+              <label v-if="stat.status == 1">★</label>
+              <span>注意</span> <label v-if="stat.status == 2">★</label>
+              <span>超标</span> <label v-if="stat.status == 3">★</label>
             </div>
           </h3>
         </div>
@@ -203,16 +203,15 @@
             <li>{{ stat.sum }}</li>
             <li
               v-if="
-                stat.tz_status == 1 ||
                 stat.tz_status == 0 ||
                 stat.tz_status == undefined
               "
             >
               无
             </li>
-            <li v-if="stat.tz_status == 2">少量</li>
-            <li v-if="stat.tz_status == 3">中量</li>
-            <li v-if="stat.tz_status == 4">大量</li>
+            <li v-if="stat.tz_status == 1">少量</li>
+            <li v-if="stat.tz_status == 2">中量</li>
+            <li v-if="stat.tz_status == 3">大量</li>
             <div style="clear: both"></div>
           </ul>
         </div>
@@ -238,13 +237,6 @@
             <div>
               <span style="margin-right: 10px">倍数：{{ item.lv }}</span>
               <span style="margin-left: 15px">光源：W/G</span>
-              <el-button
-                type="text"
-                v-if="item.id != stat.tz_id && item.id != stat.moli_id"
-                style="padding: 0; margin-left: 20px"
-                @click="del(item)"
-                >删除</el-button
-              >
             </div>
           </li>
           <div style="clear: both"></div>
@@ -344,8 +336,10 @@ export default {
       });
     },
     report(row) {
-      this.dialogVisible = true;
-      this.stat = row.stat;
+      this.$router.push({
+        path: "/statement/tables",
+        query: { id: row.stat.report.id },
+      });
     },
     close() {
       this.stat = { report: {}, images: [], image: {} };

@@ -42,7 +42,7 @@ ipcMain.on('close', () => {
 async function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 1380,
+    width: 1400,
     height: 950,
     minHeight: 450,
     resizable: false,

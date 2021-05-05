@@ -29,7 +29,7 @@
 
           <el-form-item class="item5">
             <el-select
-              v-model="formInline.motor_num"
+              v-model="formInline.motor_type"
               clearable
               placeholder="发动机型号"
               @change="loadReport"
@@ -40,8 +40,8 @@
               <el-option
                 v-for="item in motors"
                 :key="item.id"
-                :label="item.motor_num"
-                :value="item.motor_num"
+                :label="item.motor_type"
+                :value="item.motor_type"
               />
             </el-select>
           </el-form-item>
@@ -116,9 +116,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="发动机编号">
+          <el-table-column label="发动机型号">
             <template slot-scope="scope">
-              {{ scope.row.motor_num }}
+              {{ scope.row.motor_type}}
             </template>
           </el-table-column>
           <el-table-column label="采样部位">
