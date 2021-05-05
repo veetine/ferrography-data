@@ -72,7 +72,11 @@ import localStore from "../../utils/localStore";
 
 export default {
   name: "Login",
-
+  created() {
+    ipcRenderer.on("ping", (event, message) => {
+      ipcRenderer.send("close");
+    });
+  },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {

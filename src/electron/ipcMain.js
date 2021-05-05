@@ -15,6 +15,12 @@ function initIpcMain(_mainWin) {
   mainWin.setResizable(true)
   mainWin.setMaximizable(true)
   ipcMain.on('logout', logout)
+  ipcMain.on('getPrinterList', (event) => {
+    // //主线程获取打印机列表
+    const list = mainWin.webContents.getPrinters();
+    // //通过webContents发送事件到渲染线程，同时将打印机列表也传过去
+    mainWin.webContents.send('getPrinterList', list);
+  });
 }
 
 function loginSuccess() {
@@ -26,14 +32,14 @@ function loginSuccess() {
 }
 
 function logout() {
-  /* mainWin.setBounds({
-    width: 1200,
-    height: 700
-  })
-  mainWin.setResizable(false)
-  mainWin.setMaximizable(false)
+  // mainWin.setBounds({
+  //   width: 1200,
+  //   height: 700
+  // })
+  // mainWin.setResizable(false)
+  // mainWin.setMaximizable(false)
 
-  mainWin.center() */
+  // mainWin.center()
 }
 
 function initMenu() {
